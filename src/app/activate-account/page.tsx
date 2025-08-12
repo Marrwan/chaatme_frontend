@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -10,7 +10,7 @@ import { CheckCircle2, XCircle, Loader2 } from 'lucide-react'
 import { authService } from '@/services/authService'
 import { ApiRequestError } from '@/lib/api'
 
-export default function ActivateAccountPage() {
+function ActivateAccountContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isActivating, setIsActivating] = useState(true)
@@ -100,72 +100,72 @@ export default function ActivateAccountPage() {
               </>
             )}
           </CardHeader>
-          <CardContent className="space-y-6">
-            {isActivating && (
-              <div className="text-center">
-                <p className="text-gray-600">
-                  Activating your account, please wait...
-                </p>
-              </div>
+          <CardContent className="space-y-4">
+            {activationError && (
+              <Alert variant="destructive">
+                <XCircle className="h-4 w-4" />
+                <AlertDescription>{activationError}</AlertDescription>
+              </Alert>
             )}
 
             {activationSuccess && (
-              <>
-                <Alert>
-                  <CheckCircle2 className="h-4 w-4" />
-                  <AlertDescription className="text-center">
-                    {activationSuccess}
-                  </AlertDescription>
-                </Alert>
-                
-                <div className="text-center space-y-4">
-                  <p className="text-sm text-gray-600 mb-6">
-                    You can now login to your account and start using Choice Dating.
-                  </p>
-                  
-                  <Button asChild className="w-full">
-                    <Link href="/login">
-                      Continue to Login
-                    </Link>
-                  </Button>
-                </div>
-              </>
+              <Alert>
+                <CheckCircle2 className="h-4 w-4" />
+                <AlertDescription>{activationSuccess}</AlertDescription>
+              </Alert>
             )}
 
-            {activationError && (
-              <>
-                <Alert variant="destructive">
-                  <XCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    {activationError}
-                  </AlertDescription>
-                </Alert>
-                
-                <div className="text-center space-y-4">
-                  <p className="text-sm text-gray-600">
-                    The activation link may have expired or is invalid.
-                  </p>
-                  
-                  <div className="space-y-2">
-                    <Button 
-                      onClick={handleResendActivation}
-                      className="w-full"
-                    >
-                      Request New Activation Link
-                    </Button>
-                    
-                    <Button asChild variant="outline" className="w-full">
-                      <Link href="/login">
-                        Back to Login
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </>
-            )}
+            <div className="space-y-3">
+              {activationSuccess ? (
+                <Button asChild className="w-full">
+                  <Link href="/login">
+                    Continue to Login
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    onClick={handleResendActivation}
+                    variant="outline" 
+                    className="w-full"
+                  >
+                    Resend Activation Email
+                  </Button>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/login">
+                      Back to Login
+                    </Link>
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <div className="text-center text-sm text-gray-600">
+              <p>
+                Having trouble?{' '}
+                <Link href="/contact" className="text-blue-600 hover:text-blue-500">
+                  Contact Support
+                </Link>
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function ActivateAccountPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 text-blue-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ActivateAccountContent />
+    </Suspense>
   )
 } 

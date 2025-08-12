@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -16,7 +16,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { LoadingButton } from '@/components/ui/spinner'
 import { Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react'
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -88,12 +88,12 @@ export default function ResetPasswordPage() {
                   Request New Reset Link
                 </LoadingButton>
               </Link>
-                              <Link 
-                  href="/login"
-                  className="block text-center text-rose-500 hover:underline font-medium"
-                >
-                  Back to Sign In
-                </Link>
+              <Link 
+                href="/login"
+                className="block text-center text-rose-500 hover:underline font-medium"
+              >
+                Back to Sign In
+              </Link>
             </div>
           </div>
         </FormWrapper>
@@ -260,5 +260,13 @@ export default function ResetPasswordPage() {
         </form>
       </FormWrapper>
     </div>
+  )
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
   )
 } 

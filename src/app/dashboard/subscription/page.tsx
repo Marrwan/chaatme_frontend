@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,7 +21,7 @@ import {
   Loader2
 } from 'lucide-react'
 
-export default function SubscriptionPage() {
+function SubscriptionContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, isAuthenticated } = useAuth()
@@ -87,7 +87,9 @@ export default function SubscriptionPage() {
         // Reload subscription data
         await loadSubscriptionData()
         // Update auth context
-        window.location.reload()
+        if (typeof window !== 'undefined') {
+          window.location.reload()
+        }
       } else {
         setMessage('Payment verification failed. Please try again.')
         setMessageType('error')
@@ -406,5 +408,13 @@ export default function SubscriptionPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SubscriptionPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SubscriptionContent />
+    </Suspense>
   )
 } 

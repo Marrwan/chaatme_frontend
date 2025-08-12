@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -46,8 +46,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, onDelete,
     })
   }
 
-  const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return Image
+  const getFileIcon = (fileType: string) => {
+    if (fileType.startsWith('image/')) return Image
     return File
   }
 
@@ -134,23 +134,23 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, onDelete,
           {message.attachments && message.attachments.length > 0 && (
             <div className="mt-2 space-y-2">
               {message.attachments.map((attachment) => {
-                const FileIcon = getFileIcon(attachment.mimeType)
+                const FileIcon = getFileIcon(attachment.file_type)
                 
-                if (attachment.mimeType.startsWith('image/')) {
+                if (attachment.file_type.startsWith('image/')) {
                   return (
                     <div key={attachment.id} className="relative">
                       <AuthenticatedImage
-                        src={attachment.thumbnailUrl || attachment.fileUrl}
-                        alt={attachment.originalName}
+                        src={attachment.thumbnail_url || attachment.file_url}
+                        alt={attachment.original_name}
                         className="max-w-full h-auto rounded cursor-pointer"
-                        onClick={() => downloadFile(attachment.fileUrl, attachment.originalName)}
+                        onClick={() => downloadFile(attachment.file_url, attachment.original_name)}
                       />
                       <div className="absolute top-2 right-2">
                         <Button
                           size="sm"
                           variant="outline"
                           className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
-                          onClick={() => downloadFile(attachment.fileUrl, attachment.originalName)}
+                          onClick={() => downloadFile(attachment.file_url, attachment.original_name)}
                         >
                           <Download className="h-4 w-4" />
                         </Button>
@@ -162,12 +162,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, onDelete,
                   <div 
                     key={attachment.id} 
                     className="flex items-center space-x-2 p-2 rounded border border-gray-200 bg-white/10 cursor-pointer hover:bg-white/20"
-                    onClick={() => downloadFile(attachment.fileUrl, attachment.originalName)}
+                    onClick={() => downloadFile(attachment.file_url, attachment.original_name)}
                   >
                     <FileIcon className="h-4 w-4" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm truncate">{attachment.originalName}</p>
-                      <p className="text-xs opacity-75">{formatFileSize(attachment.fileSize)}</p>
+                      <p className="text-sm truncate">{attachment.original_name}</p>
+                      <p className="text-xs opacity-75">{formatFileSize(attachment.size)}</p>
                     </div>
                     <Download className="h-4 w-4" />
                   </div>
@@ -247,7 +247,7 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ isTyping, user }) => 
 // Use a counter for deterministic message ID generation
 let conversationMessageIdCounter = 0
 
-export default function ChatPage() {
+function ChatPageContent() {
   const router = useRouter()
   const { conversationId } = useParams()
   const searchParams = useSearchParams()
@@ -1102,5 +1102,13 @@ export default function ChatPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChatPageContent />
+    </Suspense>
   )
 }
