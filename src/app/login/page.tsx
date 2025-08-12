@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -128,7 +128,7 @@ export default function LoginPage() {
           <div className="relative w-full h-full">
             {/* Main image: ChaatMe Image 2 */}
             <div className="absolute top-0 left-0 w-80 h-96 rounded-lg overflow-hidden transform rotate-3 shadow-lg">
-              <Image src="/ChaatMe Image 2.jpg" alt="ChaatMe visual" fill className="object-cover" />
+              <img src="/ChaatMe Image 2.jpg" alt="ChaatMe visual" className="object-cover w-full h-full" />
             </div>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function LoginPage() {
             {/* ChaatMe Logo */}
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-2">
-                <Image src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={40} height={40} className="rounded" />
+                <img src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={40} height={40} className="rounded" />
                 <div className="text-2xl font-bold text-gray-900">Login to your account</div>
               </div>
             </div>

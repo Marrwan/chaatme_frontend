@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { 
@@ -51,7 +51,7 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center space-x-2">
-            <Image src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={32} height={32} className="rounded" />
+            <img src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={32} height={32} className="rounded" />
             <span className="text-xl font-semibold text-gray-900">ChaatMe.com</span>
           </Link>
 
