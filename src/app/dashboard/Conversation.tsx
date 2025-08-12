@@ -1,13 +1,5 @@
 import React from 'react';
-
-interface Message {
-  id: string;
-  senderId: string;
-  content: string;
-  createdAt: string;
-  isRead: boolean;
-  attachments?: Array<{ mimeType: string }>;
-}
+import { type Message } from '@/services/chatService';
 
 interface ConversationProps {
   userId: string;
@@ -20,7 +12,7 @@ export default function Conversation({ userId, messages = [] }: ConversationProp
       {/* Chat messages UI (placeholder) */}
       <div className="messages-list">
         {messages.map((msg, idx) => (
-          <div key={idx} className={`message ${msg.senderId === userId ? 'sent' : 'received'}`}>{msg.content}</div>
+          <div key={idx} className={`message ${msg.senderId === userId ? 'sent' : 'received'}`}>{msg.content || ''}</div>
         ))}
       </div>
     </div>

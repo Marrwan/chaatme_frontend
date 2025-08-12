@@ -4,14 +4,8 @@ import "./globals.css";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ToastContextProvider } from "@/lib/useToast";
 import { AuthDebug } from "@/components/debug/AuthDebug";
-import { Header } from '@/components/layout/header';
-import { useAuth } from '@/lib/store';
+import { HeaderWithAuth } from '@/components/layout/HeaderWithAuth';
 import React from 'react';
-
-function HeaderWithAuth() {
-  const { isAuthenticated, user, logout } = useAuth();
-  return <Header isAuthenticated={isAuthenticated} user={user || undefined} onLogout={logout} />;
-}
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -19,29 +13,31 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Choice Talent - Empower Your Talent Acquisition",
-  description: "Choice Talent provides innovative solutions to streamline your hiring process, connect with top talent, and build exceptional teams.",
-  authors: [{ name: "Choice Talent Team" }],
-  keywords: "talent acquisition,hiring,recruitment,HR,Choice Talent",
-  creator: "Choice Talent",
-  publisher: "Choice Talent",
+  title: "ChaatMe.com",
+  description: "ChaatMe.com – fast, modern chat and calling.",
+  authors: [{ name: "ChaatMe" }],
+  keywords: "chat,messaging,calling,video,ChaatMe",
+  creator: "ChaatMe",
+  publisher: "ChaatMe",
   robots: "index, follow",
   openGraph: {
-    title: "Choice Talent - Empower Your Talent Acquisition",
-    description: "Choice Talent provides innovative solutions to streamline your hiring process, connect with top talent, and build exceptional teams.",
-    url: "https://choicetalent.com",
-    siteName: "Choice Talent",
+    title: "ChaatMe.com",
+    description: "ChaatMe.com – fast, modern chat and calling.",
+    url: "https://chaatme.com",
+    siteName: "ChaatMe",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@choicetalent",
-    title: "Choice Talent - Empower Your Talent Acquisition",
-    description: "Choice Talent provides innovative solutions to streamline your hiring process, connect with top talent, and build exceptional teams.",
+    creator: "@chaatme",
+    title: "ChaatMe.com",
+    description: "ChaatMe.com – fast, modern chat and calling.",
   },
   icons: {
-    icon: "/favicon.ico"
+    icon: "/ChaatMeLogo.jpg",
+    shortcut: "/ChaatMeLogo.jpg",
+    apple: "/ChaatMeLogo.jpg"
   }
 };
 
@@ -51,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>
           <ToastContextProvider>

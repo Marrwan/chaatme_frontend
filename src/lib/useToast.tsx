@@ -23,11 +23,15 @@ const ToastContext = React.createContext<ToastContextType>({
   removeToast: () => {}
 })
 
+// Use a counter for deterministic ID generation
+let toastIdCounter = 0
+
 export function ToastContextProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<ToastState[]>([])
 
   const addToast = React.useCallback((toast: Omit<ToastState, 'id'>) => {
-    const id = Math.random().toString(36).substr(2, 9)
+    // Use a simple counter-based ID that's deterministic
+    const id = `toast-${++toastIdCounter}`
     const newToast: ToastState = { ...toast, id }
     
     setToasts(prev => [...prev, newToast])

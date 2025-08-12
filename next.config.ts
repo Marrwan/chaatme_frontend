@@ -3,11 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://choice-talent-backend.onrender.com/api',
-    NEXT_PUBLIC_SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL || 'https://choice-talent-backend.onrender.com',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://chaatme-backend.onrender.com/api',
+    NEXT_PUBLIC_SOCKET_URL: process.env.NEXT_PUBLIC_SOCKET_URL || 'https://chaatme-backend.onrender.com',
   },
   images: {
-    domains: ['localhost', 'choice-talent-backend.onrender.com'],
+    domains: ['localhost', 'chaatme-backend.onrender.com'],
     
   },
   eslint: {

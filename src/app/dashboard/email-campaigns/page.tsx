@@ -94,18 +94,7 @@ export default function EmailCampaignsPage() {
     }
   }
 
-  const createDefaultCareerProfileCampaign = async () => {
-    try {
-      const response = await emailCampaignService.createDefaultCareerProfileCampaign()
-      if (response.success) {
-        toast.showSuccess('Default career profile campaign created successfully')
-        fetchCampaigns()
-      }
-    } catch (error) {
-      console.error('Error creating default campaign:', error)
-      toast.showError('Failed to create default campaign')
-    }
-  }
+
 
   const startCampaign = async (id: string) => {
     try {
@@ -256,10 +245,7 @@ export default function EmailCampaignsPage() {
             <Users className="w-4 h-4 mr-2" />
             Calculate Stats
           </Button>
-          <Button onClick={createDefaultCareerProfileCampaign} variant="outline">
-            <Mail className="w-4 h-4 mr-2" />
-            Create Default Campaign
-          </Button>
+
           <Button 
             onClick={() => setShowCreateDialog(true)} 
             className="bg-green-600 hover:bg-green-700 text-white"

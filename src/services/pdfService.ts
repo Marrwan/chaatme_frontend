@@ -17,7 +17,7 @@ export class PDFService {
     options: PDFGenerationOptions = {}
   ): Promise<void> {
     const {
-      filename = 'career-profile.pdf',
+      filename = 'document.pdf',
       format = 'a4',
       orientation = 'portrait',
       quality = 1
@@ -70,7 +70,7 @@ export class PDFService {
     options: PDFGenerationOptions = {}
   ): Promise<void> {
     const {
-      filename = 'career-profile.pdf',
+      filename = 'document.pdf',
       format = 'a4',
       orientation = 'portrait',
       quality = 1
@@ -122,7 +122,7 @@ export class PDFService {
     options: PDFGenerationOptions = {}
   ): Promise<void> {
     const {
-      filename = 'career-profile.pdf',
+      filename = 'document.pdf',
       format = 'a4',
       orientation = 'portrait',
       quality = 1
@@ -138,50 +138,7 @@ export class PDFService {
     }
   }
 
-  /**
-   * Generate PDF with custom styling for career profile
-   */
-  static async generateCareerProfilePDF(
-    element: HTMLElement,
-    profileName: string,
-    options: PDFGenerationOptions = {}
-  ): Promise<void> {
-    const {
-      filename = `${profileName.replace(/\s+/g, '-').toLowerCase()}-career-profile.pdf`,
-      format = 'a4',
-      orientation = 'portrait',
-      quality = 1
-    } = options;
 
-    try {
-      // Add print-specific styles
-      const originalStyle = element.style.cssText;
-      element.style.cssText += `
-        background: white !important;
-        color: black !important;
-        box-shadow: none !important;
-        border: none !important;
-        margin: 0 !important;
-        padding: 20px !important;
-        font-size: 12px !important;
-        line-height: 1.4 !important;
-      `;
-
-      // Generate PDF
-      await this.generatePDFFromElement(element, {
-        filename,
-        format,
-        orientation,
-        quality
-      });
-
-      // Restore original styles
-      element.style.cssText = originalStyle;
-    } catch (error) {
-      console.error('Error generating career profile PDF:', error);
-      throw new Error('Failed to generate career profile PDF');
-    }
-  }
 }
 
 export default PDFService; 

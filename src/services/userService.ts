@@ -138,6 +138,8 @@ export const userService = {
     return { message: response.message }
   },
 
+
+
   // Check if profile is complete
   isProfileComplete(user: User): boolean {
     const requiredFields: (keyof User)[] = [

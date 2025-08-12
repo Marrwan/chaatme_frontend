@@ -244,6 +244,9 @@ const TypingIndicator: React.FC<TypingIndicatorProps> = ({ isTyping, user }) => 
   )
 }
 
+// Use a counter for deterministic message ID generation
+let conversationMessageIdCounter = 0
+
 export default function ChatPage() {
   const router = useRouter()
   const { conversationId } = useParams()
@@ -713,7 +716,7 @@ export default function ChatPage() {
     e?.preventDefault()
     if (!newMessage.trim() || !conversationId) return
 
-    const tempMessageId = `temp-${Date.now()}`
+    const tempMessageId = `temp-${++conversationMessageIdCounter}`
     const messageData = {
       conversationId: conversationId as string,
       content: newMessage,
@@ -732,7 +735,21 @@ export default function ChatPage() {
       updatedAt: new Date().toISOString(),
       isRead: false,
       isDeleted: false,
-      sender: currentUser!,
+      status: 'pending',
+      sender: {
+        id: currentUser?.id || '',
+        name: currentUser?.name || 'User',
+        realName: currentUser?.realName || currentUser?.name || 'User',
+        username: currentUser?.username || 'user',
+        profilePicture: currentUser?.profilePicture,
+        interests: currentUser?.interests,
+        hobbies: currentUser?.hobbies,
+        occupation: currentUser?.occupation,
+        country: currentUser?.country,
+        state: currentUser?.state,
+        isOnline: currentUser?.isOnline,
+        createdAt: currentUser?.createdAt || new Date().toISOString()
+      },
       attachments: []
     }
 

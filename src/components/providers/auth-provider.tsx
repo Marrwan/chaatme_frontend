@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/lib/store'
 
 interface AuthProviderProps {
@@ -9,6 +9,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { initialize, isInitialized, isLoading } = useAuth()
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
     console.log('[AuthProvider] Initializing auth state...')
@@ -16,9 +17,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     initialize().catch(error => {
       console.error('[AuthProvider] Auth initialization failed:', error)
     })
+    setIsHydrated(true)
   }, [initialize])
 
-  // Show loading screen while initializing
+  // During SSR and initial hydration, render children to avoid hydration mismatch
+  if (!isHydrated) {
+    return <>{children}</>
+  }
+
+  // Show loading screen only after hydration is complete
   if (!isInitialized || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

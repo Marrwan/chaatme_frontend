@@ -88,11 +88,6 @@ export const emailCampaignService = {
     return apiClient.post('/email-campaigns', data, true)
   },
 
-  // Create default career profile campaign
-  async createDefaultCareerProfileCampaign(): Promise<{ success: boolean; data: { campaign: EmailCampaign; totalEmails: number } }> {
-    return apiClient.post('/email-campaigns/default-career-profile', {}, true)
-  },
-
   // Get all campaigns
   async getCampaigns(page = 1, limit = 10): Promise<{ success: boolean; data: CampaignListResponse }> {
     return apiClient.get(`/email-campaigns?page=${page}&limit=${limit}`, true)

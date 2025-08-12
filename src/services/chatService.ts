@@ -17,12 +17,11 @@ export interface User {
 
 export interface MessageAttachment {
   id: string
-  fileName: string
-  originalName: string
-  mimeType: string
-  fileSize: number
-  fileUrl: string
-  thumbnailUrl?: string
+  original_name: string
+  file_type: string
+  size: number
+  file_url: string
+  thumbnail_url?: string
 }
 
 export interface Message {
@@ -31,12 +30,17 @@ export interface Message {
   senderId: string
   content?: string
   messageType: 'text' | 'image' | 'file' | 'audio' | 'video'
+  status: 'pending' | 'sent' | 'delivered' | 'read'
   isRead: boolean
   readAt?: string
+  sentAt?: string
+  deliveredAt?: string
   editedAt?: string
   isDeleted: boolean
   deletedAt?: string
   replyToMessageId?: string
+  tempMessageId?: string
+  sequenceId?: number
   createdAt: string
   updatedAt: string
   sender: User

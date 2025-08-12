@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,7 +16,6 @@ import { authService } from '@/services/authService'
 import { ApiRequestError, tokenManager } from '@/lib/api'
 import { useAuth } from '@/lib/store'
 import { loginSchema, type LoginFormData } from '@/lib/validations'
-import { professionalCareerProfileService } from '@/services/professionalCareerProfileService';
 
 export default function LoginPage() {
   const router = useRouter()
@@ -39,8 +39,8 @@ export default function LoginPage() {
   // Redirect if already authenticated
   React.useEffect(() => {
     if (isInitialized && isAuthenticated) {
-      console.log('[LoginPage] User is authenticated, redirecting to career dashboard')
-      router.replace('/dashboard/career')
+      console.log('[LoginPage] User is authenticated, redirecting to dashboard')
+      router.replace('/dashboard')
     }
   }, [isAuthenticated, isInitialized, router])
 
@@ -57,44 +57,8 @@ export default function LoginPage() {
       tokenManager.set(response.token)
       login(response.user, response.token)
       
-      // After login, check career profile completion
-      setCheckingProfile(true)
-      const profileRes = await professionalCareerProfileService.getProfile();
-      setCheckingProfile(false)
-      if (profileRes.success && profileRes.data.profile) {
-        const profile = profileRes.data.profile;
-        // Check required fields (adjust as needed)
-        const requiredFields = [
-          profile.fullName,
-          profile.gender,
-          profile.dateOfBirth,
-          profile.phoneNumber,
-          profile.emailAddress,
-          profile.address,
-          profile.lgaOfResidence,
-          profile.stateOfResidence,
-          profile.professionalSummary,
-          profile.persona,
-          (profile.expertiseCompetencies?.length || 0) > 0,
-          (profile.softwareSkills?.length || 0) > 0,
-          (profile.workExperiences?.length || 0) > 0,
-          (profile.higherEducations?.length || 0) > 0,
-          (profile.basicEducations?.length || 0) > 0,
-          (profile.professionalMemberships?.length || 0) > 0,
-          (profile.trainingCertifications?.length || 0) > 0,
-          profile.nyscStatus,
-          (profile.referenceDetails?.length || 0) > 0
-        ];
-        const isComplete = requiredFields.filter(Boolean).length === requiredFields.length;
-        if (isComplete) {
-          router.replace('/dashboard/career');
-        } else {
-          router.replace('/dashboard/professional-career-profile');
-        }
-      } else {
-        // If no profile, redirect to form
-        router.replace('/dashboard/professional-career-profile');
-      }
+      // After login, redirect to main dashboard
+      router.replace('/dashboard');
     } catch (error: unknown) {
       let errorMessage = 'Login failed. Please check your credentials and try again.'
       
@@ -147,7 +111,7 @@ export default function LoginPage() {
 
   if (checkingProfile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Checking your profile...</p>
@@ -158,27 +122,39 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-gray-900">
-              Welcome Back
-            </CardTitle>
-            <CardDescription>
-              Sign in to your Choice Talent account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="max-w-4xl w-full flex items-center justify-center space-x-8">
+        {/* Left Side - Image Collage */}
+        <div className="hidden lg:block relative w-96 h-96">
+          <div className="relative w-full h-full">
+            {/* Main image: ChaatMe Image 2 */}
+            <div className="absolute top-0 left-0 w-80 h-96 rounded-lg overflow-hidden transform rotate-3 shadow-lg">
+              <Image src="/ChaatMe Image 2.jpg" alt="ChaatMe visual" fill className="object-cover" />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Login Form */}
+        <div className="w-full max-w-sm">
+          <div className="bg-white border border-gray-300 rounded-sm px-8 pt-6 pb-8">
+            {/* ChaatMe Logo */}
+            <div className="text-center mb-6">
+              <div className="flex items-center justify-center gap-2">
+                <Image src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={40} height={40} className="rounded" />
+                <div className="text-2xl font-bold text-gray-900">Login to your account</div>
+              </div>
+            </div>
+
+            {/* Login Form */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
               {submitError && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="mb-4 text-sm">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{submitError}</AlertDescription>
                 </Alert>
               )}
 
               {needsActivation && (
-                <Alert>
+                <Alert className="mb-4 text-sm">
                   <Mail className="h-4 w-4" />
                   <AlertDescription className="space-y-2">
                     <p>Your account needs to be activated before you can login.</p>
@@ -187,7 +163,7 @@ export default function LoginPage() {
                       variant="outline" 
                       size="sm"
                       onClick={handleResendActivation}
-                      className="w-full"
+                      className="w-full text-xs"
                     >
                       Resend Activation Email
                     </Button>
@@ -195,39 +171,33 @@ export default function LoginPage() {
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
+              {/* Email Input */}
+              <div>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Email address"
                   autoComplete="email"
                   {...register('email')}
-                  className={errors.email ? 'border-red-500' : ''}
+                  className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
+                  style={{ backgroundColor: '#fafafa' }}
                 />
                 {errors.email && (
-                  <p className="text-sm text-red-600">{errors.email.message}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link 
-                    href="/forgot-password" 
-                    className="text-sm text-[#0044CC] hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+              {/* Password Input */}
+              <div>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
+                    placeholder="Password"
                     autoComplete="current-password"
                     {...register('password')}
-                    className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                    className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                    style={{ backgroundColor: '#fafafa' }}
                   />
                   <button
                     type="button"
@@ -242,29 +212,49 @@ export default function LoginPage() {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-sm text-red-600">{errors.password.message}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
                 )}
               </div>
 
+              {/* Login Button */}
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full h-10 bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm rounded-sm transition-colors"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Signing In...' : 'Sign In'}
+                {isSubmitting ? 'Logging In...' : 'Log In'}
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Don&apos;t have an account?{' '}
-                <Link href="/register" className="font-medium text-[#0044CC] hover:underline">
-                  Create one now
-                </Link>
-              </p>
+            {/* Divider */}
+            <div className="flex items-center my-4">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="px-4 text-xs text-gray-500 font-semibold">OR</span>
+              <div className="flex-1 border-t border-gray-300"></div>
             </div>
-          </CardContent>
-        </Card>
+
+            {/* Forgot Password */}
+            <div className="text-center">
+              <Link 
+                href="/forgot-password" 
+                className="text-xs text-rose-600 font-semibold hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          </div>
+
+          {/* Sign Up Card */}
+          <div className="bg-white border border-gray-300 rounded-sm px-8 py-4 text-center mt-3">
+            <p className="text-sm text-gray-900">
+              Don't have an account?{' '}
+              <Link href="/register" className="text-rose-500 font-semibold hover:underline">
+                Sign up
+              </Link>
+            </p>
+          </div>
+
+        </div>
       </div>
     </div>
   )

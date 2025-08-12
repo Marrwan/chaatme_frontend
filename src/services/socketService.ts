@@ -64,7 +64,7 @@ class SocketService {
     this.isConnecting = true
 
     // Get the backend URL from API URL by removing /api suffix
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.101:3001/api'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
     const backendUrl = apiUrl.replace('/api', '')
     
     // Generate unique connection ID to prevent duplicates
@@ -82,15 +82,15 @@ class SocketService {
       auth: {
         token: token
       },
-      transports: isEdge ? ['polling', 'websocket'] : ['websocket', 'polling'], // Edge prefers polling first
+      transports: ['websocket', 'polling'], // Try WebSocket first, fallback to polling
       withCredentials: true,
       secure: process.env.NODE_ENV === 'production',
-      timeout: isEdge ? 15000 : 10000, // Longer timeout for Edge
+      timeout: 10000,
       forceNew: true,
       reconnection: true,
-      reconnectionAttempts: isEdge ? 10 : 5, // More attempts for Edge
-      reconnectionDelay: isEdge ? 2000 : 1000, // Longer delay for Edge
-      reconnectionDelayMax: isEdge ? 10000 : 5000,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
       autoConnect: true,
       path: '/socket.io/',
       query: {
@@ -98,12 +98,7 @@ class SocketService {
         browser: isEdge ? 'edge' : 'other',
         connectionId: this.connectionId,
         timestamp: Date.now().toString()
-      },
-      // Edge-specific options
-      ...(isEdge && {
-        upgrade: false, // Disable upgrade for Edge initially
-        rememberUpgrade: false
-      })
+      }
     })
 
     // Setup event handlers BEFORE connection to ensure they're registered early
@@ -263,6 +258,16 @@ class SocketService {
       this.emitToHandlers('message_read', data)
     })
 
+    this.socket.on('message_delivered', (data) => {
+      console.log('📬 Message delivered:', data)
+      this.emitToHandlers('message_delivered', data)
+    })
+
+    this.socket.on('message_sent', (data) => {
+      console.log('✅ Message sent confirmation:', data)
+      this.emitToHandlers('message_sent', data)
+    })
+
     this.socket.on('message_deleted', (data) => {
       console.log('🗑️ Message deleted:', data)
       this.emitToHandlers('message_deleted', data)
@@ -387,11 +392,33 @@ class SocketService {
       this.socket.emit('send_message', data)
     } else {
       console.error(`[Socket] Cannot send message: Socket not connected`)
-      // Emit error event for UI handling
-      this.emitToHandlers('message_error', {
-        tempMessageId: data.tempMessageId,
-        error: 'Socket not connected'
-      })
+      
+      // Try to reconnect if not connected
+      if (this.socket && !this.socket.connected) {
+        console.log(`[Socket] Attempting to reconnect...`)
+        this.socket.connect()
+        
+        // Wait a bit and try again
+        setTimeout(() => {
+          if (this.socket?.connected) {
+            console.log(`[Socket] Reconnected, sending message now`)
+            this.socket.emit('send_message', data)
+          } else {
+            console.error(`[Socket] Reconnection failed, message lost`)
+            // Emit error event for UI handling
+            this.emitToHandlers('message_error', {
+              tempMessageId: data.tempMessageId,
+              error: 'Socket not connected - message lost'
+            })
+          }
+        }, 1000)
+      } else {
+        // Emit error event for UI handling
+        this.emitToHandlers('message_error', {
+          tempMessageId: data.tempMessageId,
+          error: 'Socket not connected'
+        })
+      }
     }
   }
 
@@ -419,6 +446,33 @@ class SocketService {
   markMessageAsRead(messageId: string, conversationId: string): void {
     if (this.socket?.connected) {
       this.socket.emit('mark_message_read', { messageId, conversationId })
+    }
+  }
+
+  /**
+   * Send message acknowledgment
+   */
+  sendMessageAck(messageId: string, tempMessageId: string): void {
+    if (this.socket?.connected) {
+      this.socket.emit('message_ack', { messageId, tempMessageId })
+    }
+  }
+
+  /**
+   * Send message delivered confirmation
+   */
+  sendMessageDelivered(messageId: string): void {
+    if (this.socket?.connected) {
+      this.socket.emit('message_delivered', { messageId })
+    }
+  }
+
+  /**
+   * Send message read confirmation
+   */
+  sendMessageRead(messageId: string): void {
+    if (this.socket?.connected) {
+      this.socket.emit('message_read', { messageId })
     }
   }
 

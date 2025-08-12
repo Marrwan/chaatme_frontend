@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -25,13 +26,13 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [registrationSuccess, setRegistrationSuccess] = useState<string | null>(null)
+  const [acceptTerms, setAcceptTerms] = useState(false)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    getValues
+    setValue
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -42,8 +43,8 @@ export default function RegisterPage() {
   // Redirect if already authenticated
   React.useEffect(() => {
     if (isInitialized && isAuthenticated) {
-      console.log('[RegisterPage] User is authenticated, redirecting to career dashboard')
-      router.replace('/dashboard/career')
+      console.log('[RegisterPage] User is authenticated, redirecting to dashboard')
+      router.replace('/dashboard')
     }
   }, [isAuthenticated, isInitialized, router])
 
@@ -56,10 +57,9 @@ export default function RegisterPage() {
       const response = await authService.register({
         email: data.email,
         password: data.password,
-        name: data.email.split('@')[0] // Use part before @ as default name
+        name: data.email.split('@')[0]
       })
 
-      // Show success message
       setRegistrationSuccess(response.message || 'Registration successful! Please check your email to activate your account.')
 
     } catch (error: unknown) {
@@ -77,7 +77,6 @@ export default function RegisterPage() {
     }
   }
 
-  // If registration was successful, show success message
   if (registrationSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -108,7 +107,7 @@ export default function RegisterPage() {
                 </p>
                 
                 <div className="space-y-2">
-                  <Button asChild className="w-full">
+                  <Button asChild className="full">
                     <Link href="/login">
                       Go to Login
                     </Link>
@@ -135,49 +134,65 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-gray-900">
-              Create Account
-            </CardTitle>
-            <CardDescription>
-              Join Choice Talent and discover amazing opportunities
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="max-w-4xl w-full flex items-center justify-center space-x-8">
+        {/* Left Side - Image Collage */}
+        <div className="hidden lg:block relative w-96 h-96">
+          <div className="relative w-full h-full">
+            {/* Main image: ChaatMe Image 2 */}
+            <div className="absolute top-0 left-0 w-80 h-96 rounded-lg overflow-hidden transform rotate-3 shadow-lg">
+              <Image src="/ChaatMe Image 2.jpg" alt="ChaatMe visual" fill className="object-cover" />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Register Form */}
+        <div className="w-full max-w-sm">
+          <div className="bg-white border border-gray-300 rounded-sm px-8 pt-6 pb-8">
+            <div className="text-center mb-6">
+              <div className="flex items-center justify-center gap-2">
+                <Image src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={40} height={40} className="rounded" />
+                <div className="text-2xl font-bold text-gray-900">Create Account</div>
+              </div>
+              <p className="text-sm text-gray-600 font-semibold mt-2">
+                Sign up to see photos and videos from your friends.
+              </p>
+            </div>
+
+            {/* Register Form */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
               {submitError && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="mb-4 text-sm">
                   <AlertDescription>{submitError}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
+              {/* Email Input */}
+              <div>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Email address"
                   autoComplete="email"
                   {...register('email')}
-                  className={errors.email ? 'border-red-500' : ''}
+                  className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
+                  style={{ backgroundColor: '#fafafa' }}
                 />
                 {errors.email && (
-                  <p className="text-sm text-red-600">{errors.email.message}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+              {/* Password Input */}
+              <div>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a strong password"
+                    placeholder="Password"
                     autoComplete="new-password"
                     {...register('password')}
-                    className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+                    className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                    style={{ backgroundColor: '#fafafa' }}
                   />
                   <button
                     type="button"
@@ -192,20 +207,21 @@ export default function RegisterPage() {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-sm text-red-600">{errors.password.message}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+              {/* Confirm Password Input */}
+              <div>
                 <div className="relative">
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm your password"
+                    placeholder="Confirm Password"
                     autoComplete="new-password"
                     {...register('confirmPassword')}
-                    className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'}
+                    className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 pr-10 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                    style={{ backgroundColor: '#fafafa' }}
                   />
                   <button
                     type="button"
@@ -220,54 +236,74 @@ export default function RegisterPage() {
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.confirmPassword.message}</p>
                 )}
               </div>
 
-              <div className="flex items-center space-x-2">
+              {/* Terms Checkbox */}
+              <div className="flex items-start space-x-2 pt-2">
                 <Checkbox
                   id="acceptTerms"
-                  checked={getValues('acceptTerms')}
-                  onCheckedChange={(checked) => setValue('acceptTerms', !!checked)}
-                  className={errors.acceptTerms ? 'border-red-500' : ''}
+                  checked={acceptTerms}
+                  onCheckedChange={(checked) => {
+                    const isChecked = !!checked;
+                    setAcceptTerms(isChecked);
+                    setValue('acceptTerms', isChecked);
+                  }}
+                  className={`mt-0.5 ${errors.acceptTerms ? 'border-red-500' : ''}`}
                 />
-                <Label 
+                <label 
                   htmlFor="acceptTerms" 
-                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-xs text-gray-600 leading-tight cursor-pointer"
+                  onClick={() => {
+                    const newValue = !acceptTerms;
+                    setAcceptTerms(newValue);
+                    setValue('acceptTerms', newValue);
+                  }}
                 >
-                  I agree to the{' '}
-                  <Link href="/terms" className="text-[#0044CC] hover:underline">
-                    Terms of Service
+                  By signing up, you agree to our{' '}
+                  <Link href="/terms" className="text-rose-600 font-semibold hover:underline">
+                    Terms
                   </Link>{' '}
                   and{' '}
-                  <Link href="/privacy" className="text-[#0044CC] hover:underline">
+                  <Link href="/privacy" className="text-rose-600 font-semibold hover:underline">
                     Privacy Policy
                   </Link>
-                </Label>
+                </label>
               </div>
               {errors.acceptTerms && (
-                <p className="text-sm text-red-600">{errors.acceptTerms.message}</p>
+                <p className="text-xs text-red-500">{errors.acceptTerms.message}</p>
               )}
 
+              {/* Sign Up Button */}
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full h-10 bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm rounded-sm transition-colors"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Creating Account...' : 'Create Account'}
+                {isSubmitting ? 'Creating Account...' : 'Sign Up'}
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Already have an account?{' '}
-                <Link href="/login" className="font-medium text-[#0044CC] hover:underline">
-                  Sign in
-                </Link>
-              </p>
+            {/* Divider */}
+            <div className="flex items-center my-4">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="px-4 text-xs text-gray-500 font-semibold">OR</span>
+              <div className="flex-1 border-t border-gray-300"></div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+
+          {/* Login Card */}
+          <div className="bg-white border border-gray-300 rounded-sm px-8 py-4 text-center mt-3">
+            <p className="text-sm text-gray-900">
+              Have an account?{' '}
+              <Link href="/login" className="text-rose-500 font-semibold hover:underline">
+                Log in
+              </Link>
+            </p>
+          </div>
+
+        </div>
       </div>
     </div>
   )

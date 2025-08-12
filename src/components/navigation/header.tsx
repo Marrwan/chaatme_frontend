@@ -8,8 +8,8 @@ export function Header() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
-          <Link href="/" className="text-2xl font-bold text-primary">
-            Choice Talent
+          <Link href="/" className="text-2xl font-bold text-[#8B0000]">
+            Choice Dating
           </Link>
 
           {/* Desktop Navigation */}
@@ -20,7 +20,7 @@ export function Header() {
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="sm">
+              <Button size="sm" className="bg-[#8B0000] hover:bg-[#660000]">
                 Register
               </Button>
             </Link>

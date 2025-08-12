@@ -85,6 +85,21 @@ export const browserUtils = {
   }
 }
 
+// Safe browser detection that won't cause hydration issues
+export const safeBrowserUtils = {
+  getBrowserName: () => {
+    // Return a default value during SSR to avoid hydration mismatches
+    if (typeof window === 'undefined') return 'unknown'
+    return browserUtils.getBrowserName()
+  },
+  
+  getBestStorage: () => {
+    // Return null during SSR to avoid hydration mismatches
+    if (typeof window === 'undefined') return null
+    return browserUtils.getBestStorage()
+  }
+}
+
 export function formatError(error: unknown): string {
   if (typeof error === 'string') return error
   if (error?.message) return error.message

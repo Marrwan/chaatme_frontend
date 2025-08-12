@@ -201,8 +201,11 @@ export default function MatchMakingPage() {
                 type="number"
                 min="18"
                 max="100"
-                value={preferenceForm.ageMin}
-                onChange={(e) => handlePreferenceChange('ageMin', parseInt(e.target.value))}
+                value={preferenceForm.ageMin || ''}
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '' : parseInt(e.target.value) || 0;
+                  handlePreferenceChange('ageMin', value);
+                }}
               />
             </div>
             <div>
@@ -212,8 +215,11 @@ export default function MatchMakingPage() {
                 type="number"
                 min="18"
                 max="100"
-                value={preferenceForm.ageMax}
-                onChange={(e) => handlePreferenceChange('ageMax', parseInt(e.target.value))}
+                value={preferenceForm.ageMax || ''}
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '' : parseInt(e.target.value) || 0;
+                  handlePreferenceChange('ageMax', value);
+                }}
               />
             </div>
           </div>
@@ -536,7 +542,7 @@ export default function MatchMakingPage() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">
-              Get support with planning a flawless date with professional guidance 
+              Get support with planning a flawless date with expert guidance 
               and personalized recommendations.
             </p>
             <Link href="/dashboard/plan-date">
@@ -674,7 +680,7 @@ export default function MatchMakingPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                <Heart className="h-8 w-8 text-pink-600" />
+                <Heart className="h-8 w-8 text-[#8B0000]" />
                 Match Making
               </h1>
               <p className="text-gray-600 mt-2">
@@ -686,17 +692,36 @@ export default function MatchMakingPage() {
 
         {/* Success/Error Message */}
         {message && (
-          <div className={`mb-6 p-4 rounded-md flex items-center max-w-4xl mx-auto ${
+          <div className={`mb-6 p-4 rounded-md max-w-4xl mx-auto ${
             messageType === 'success' 
               ? 'bg-green-50 text-green-800 border border-green-200' 
               : 'bg-red-50 text-red-800 border border-red-200'
           }`}>
-            {messageType === 'success' ? (
-              <CheckCircle className="h-5 w-5 mr-2" />
-            ) : (
-              <AlertCircle className="h-5 w-5 mr-2" />
+            <div className="flex items-center mb-3">
+              {messageType === 'success' ? (
+                <CheckCircle className="h-5 w-5 mr-2" />
+              ) : (
+                <AlertCircle className="h-5 w-5 mr-2" />
+              )}
+              {message}
+            </div>
+            
+            {/* Show upgrade button for premium errors */}
+            {messageType === 'error' && message.includes('Upgrade to Premium') && (
+              <div className="mt-3 pt-3 border-t border-red-200">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-red-700">
+                    Upgrade to Premium to unlock matchmaking features and find your perfect match!
+                  </p>
+                  <Link href="/dashboard/subscription">
+                    <Button size="sm" className="bg-[#8B0000] hover:bg-[#660000] text-white">
+                      <Crown className="h-4 w-4 mr-2" />
+                      Upgrade Now
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             )}
-            {message}
           </div>
         )}
 

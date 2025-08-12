@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { 
@@ -11,7 +12,7 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu'
-import { User, LogOut, Settings, Crown, AlertCircle, Briefcase, FileText } from 'lucide-react'
+import { User, LogOut, Settings, Crown, AlertCircle, Heart, MessageCircle, Calendar, Home } from 'lucide-react'
 
 interface User {
   id: string
@@ -23,13 +24,13 @@ interface User {
   canAccessMatchmaking?: boolean
 }
 
-interface HeaderProps {
+interface DatingHeaderProps {
   isAuthenticated?: boolean
   user?: User | null
   onLogout?: () => void
 }
 
-export function Header({ isAuthenticated = false, user, onLogout }: HeaderProps) {
+export function DatingHeader({ isAuthenticated = false, user, onLogout }: DatingHeaderProps) {
   const getInitials = (email?: string, name?: string) => {
     if (!email && !name) return 'U' // Default fallback
     
@@ -49,11 +50,9 @@ export function Header({ isAuthenticated = false, user, onLogout }: HeaderProps)
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-rose-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CT</span>
-            </div>
-            <span className="text-xl font-semibold text-gray-900">Choice Dating</span>
+          <Link href="/dashboard" className="flex items-center space-x-2">
+            <Image src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={32} height={32} className="rounded" />
+            <span className="text-xl font-semibold text-gray-900">ChaatMe.com</span>
           </Link>
 
           {/* Navigation */}
@@ -63,7 +62,7 @@ export function Header({ isAuthenticated = false, user, onLogout }: HeaderProps)
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-rose-500 text-white">
+                      <AvatarFallback className="bg-[#8B0000] text-white">
                         {getInitials(user.email, user.name)}
                       </AvatarFallback>
                     </Avatar>
@@ -93,27 +92,43 @@ export function Header({ isAuthenticated = false, user, onLogout }: HeaderProps)
                     </div>
                   </div>
                   <DropdownMenuSeparator />
-
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
+                      <Heart className="mr-2 h-4 w-4" />
                       <span>Dating Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
-
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/subscription" className="cursor-pointer">
-                      <Crown className="mr-2 h-4 w-4" />
-                      <span>Subscription</span>
+                    <Link href="/dashboard/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Dating Profile</span>
                     </Link>
                   </DropdownMenuItem>
-
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/match-making" className="cursor-pointer">
+                      <Heart className="mr-2 h-4 w-4" />
+                      <span>Match Making</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/plan-date" className="cursor-pointer">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      <span>Plan a Date</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/chat" className="cursor-pointer">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      <span>Messages</span>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/dating-settings" className="cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Dating Settings</span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />

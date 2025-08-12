@@ -4,31 +4,30 @@ import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { MainLayout } from '@/components/layout/main-layout'
 import { useAuth } from '@/lib/store'
-import { ArrowRight, Users, Target, Shield } from 'lucide-react'
+import { ArrowRight, Heart, Users, Shield, MessageCircle, Calendar, Star } from 'lucide-react'
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth()
 
   return (
-    <MainLayout isAuthenticated={isAuthenticated} user={user || undefined}>
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              Empower Your{' '}
-              <span className="text-[#0044CC]">Talent Acquisition</span>{' '}
-              Journey
+              Find Your Perfect{' '}
+              <span className="text-[#8B0000]">Match</span>{' '}
+              Today
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Choice Talent provides innovative solutions to streamline your hiring process, 
-              connect with top talent, and build exceptional teams that drive success.
+              Choice Dating connects you with meaningful relationships through intelligent matching, 
+              authentic conversations, and genuine connections that last.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {isAuthenticated ? (
-                <Button asChild size="lg" className="text-lg px-8">
+                <Button asChild size="lg" className="text-lg px-8 bg-[#8B0000] hover:bg-[#660000]">
                   <Link href="/dashboard">
                     Go to Dashboard
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -36,9 +35,9 @@ export default function HomePage() {
                 </Button>
               ) : (
                 <>
-                  <Button asChild size="lg" className="text-lg px-8">
+                  <Button asChild size="lg" className="text-lg px-8 bg-[#8B0000] hover:bg-[#660000]">
                     <Link href="/register">
-                      Get Started Free
+                      Start Dating Free
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
@@ -57,56 +56,101 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Why Choose Choice Talent?
+              Why Choose Choice Dating?
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our platform combines cutting-edge technology with human expertise 
-              to revolutionize how you find and hire talent.
+              Our platform combines advanced compatibility algorithms with genuine human connection 
+              to help you find meaningful relationships.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#0044CC] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-6 w-6 text-white" />
+                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Heart className="h-6 w-6 text-white" />
                 </div>
-                <CardTitle>Smart Talent Matching</CardTitle>
+                <CardTitle>Smart Compatibility Matching</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  Our AI-powered algorithm matches you with the perfect candidates 
-                  based on skills, experience, and cultural fit.
+                  Our AI-powered algorithm matches you with compatible partners 
+                  based on interests, values, and relationship goals.
                 </CardDescription>
               </CardContent>
             </Card>
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#0044CC] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-6 w-6 text-white" />
+                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="h-6 w-6 text-white" />
                 </div>
-                <CardTitle>Streamlined Process</CardTitle>
+                <CardTitle>Authentic Conversations</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  Reduce time-to-hire with automated screening, scheduling, 
-                  and seamless collaboration tools.
+                  Build genuine connections through meaningful conversations, 
+                  voice calls, and video chats with your matches.
                 </CardDescription>
               </CardContent>
             </Card>
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#0044CC] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-6 w-6 text-white" />
+                </div>
+                <CardTitle>Plan Perfect Dates</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Organize and plan memorable dates with our built-in 
+                  date planning tools and suggestions.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
-                <CardTitle>Secure & Compliant</CardTitle>
+                <CardTitle>Safe & Secure</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  Enterprise-grade security with GDPR compliance ensures 
-                  your data and candidates&apos; privacy are protected.
+                  Your privacy and safety are our top priority with 
+                  verified profiles and secure messaging.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <CardTitle>Community Groups</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Join interest-based groups and meet people who share 
+                  your hobbies and passions.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Star className="h-6 w-6 text-white" />
+                </div>
+                <CardTitle>Premium Features</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Unlock advanced features like unlimited messaging, 
+                  profile boosts, and detailed compatibility reports.
                 </CardDescription>
               </CardContent>
             </Card>
@@ -119,40 +163,40 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-[#0044CC] mb-2">10,000+</div>
-              <div className="text-lg text-gray-600">Successful Hires</div>
+              <div className="text-4xl font-bold text-[#8B0000] mb-2">50,000+</div>
+              <div className="text-lg text-gray-600">Happy Couples</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-[#0044CC] mb-2">500+</div>
-              <div className="text-lg text-gray-600">Partner Companies</div>
+              <div className="text-4xl font-bold text-[#8B0000] mb-2">1M+</div>
+              <div className="text-lg text-gray-600">Active Users</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-[#0044CC] mb-2">95%</div>
-              <div className="text-lg text-gray-600">Client Satisfaction</div>
+              <div className="text-4xl font-bold text-[#8B0000] mb-2">95%</div>
+              <div className="text-lg text-gray-600">Success Rate</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-[#0044CC]">
+      <section className="py-20 px-4 bg-[#8B0000]">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Transform Your Hiring?
+            Ready to Find Your Perfect Match?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of companies that trust Choice Talent to find their next great hire.
+          <p className="text-xl text-red-100 mb-8">
+            Join thousands of singles who have found meaningful relationships on Choice Dating.
           </p>
           {!isAuthenticated && (
             <Button asChild size="lg" variant="secondary" className="text-lg px-8">
               <Link href="/register">
-                Start Your Free Trial
+                Start Your Dating Journey
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           )}
         </div>
       </section>
-    </MainLayout>
+    </div>
   )
 }

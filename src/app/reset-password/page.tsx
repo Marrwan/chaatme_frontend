@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { resetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations'
 import { authService } from '@/services/authService'
 import { ApiRequestError } from '@/lib/api'
-import { MainLayout } from '@/components/layout/main-layout'
 import { FormWrapper } from '@/components/ui/form-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -64,43 +63,41 @@ export default function ResetPasswordPage() {
   // Check if token is present
   if (!token) {
     return (
-      <MainLayout>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <FormWrapper
-            title="Invalid Reset Link"
-            description="The password reset link is missing or invalid"
-          >
-            <div className="text-center space-y-6">
-              <div className="flex justify-center">
-                <AlertCircle className="h-16 w-16 text-red-500" />
-              </div>
-              
-              <div className="space-y-3">
-                <p className="text-gray-600">
-                  This password reset link is invalid or has expired.
-                </p>
-                <p className="text-sm text-gray-500">
-                  Please request a new password reset link.
-                </p>
-              </div>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <FormWrapper
+          title="Invalid Reset Link"
+          description="The password reset link is missing or invalid"
+        >
+          <div className="text-center space-y-6">
+            <div className="flex justify-center">
+              <AlertCircle className="h-16 w-16 text-red-500" />
+            </div>
+            
+            <div className="space-y-3">
+              <p className="text-gray-600">
+                This password reset link is invalid or has expired.
+              </p>
+              <p className="text-sm text-gray-500">
+                Please request a new password reset link.
+              </p>
+            </div>
 
-              <div className="space-y-2">
-                <Link href="/forgot-password">
-                  <LoadingButton className="w-full">
-                    Request New Reset Link
-                  </LoadingButton>
-                </Link>
-                <Link 
+            <div className="space-y-2">
+              <Link href="/forgot-password">
+                <LoadingButton className="w-full">
+                  Request New Reset Link
+                </LoadingButton>
+              </Link>
+                              <Link 
                   href="/login"
-                  className="block text-center text-[#0044CC] hover:underline font-medium"
+                  className="block text-center text-rose-500 hover:underline font-medium"
                 >
                   Back to Sign In
                 </Link>
-              </div>
             </div>
-          </FormWrapper>
-        </div>
-      </MainLayout>
+          </div>
+        </FormWrapper>
+      </div>
     )
   }
 
@@ -138,134 +135,130 @@ export default function ResetPasswordPage() {
 
   if (submitSuccess) {
     return (
-      <MainLayout>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <FormWrapper
-            title="Password Reset Successful"
-            description="Your password has been updated"
-          >
-            <div className="text-center space-y-6">
-              <div className="flex justify-center">
-                <CheckCircle className="h-16 w-16 text-green-500" />
-              </div>
-              
-              <div className="space-y-3">
-                <p className="text-gray-600">
-                  Your password has been successfully reset.
-                </p>
-                <p className="text-sm text-gray-500">
-                  You will be redirected to the sign in page shortly.
-                </p>
-              </div>
-
-              <Link href="/login">
-                <LoadingButton className="w-full">
-                  Continue to Sign In
-                </LoadingButton>
-              </Link>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <FormWrapper
+          title="Password Reset Successful"
+          description="Your password has been updated"
+        >
+          <div className="text-center space-y-6">
+            <div className="flex justify-center">
+              <CheckCircle className="h-16 w-16 text-green-500" />
             </div>
-          </FormWrapper>
-        </div>
-      </MainLayout>
+            
+            <div className="space-y-3">
+              <p className="text-gray-600">
+                Your password has been successfully reset.
+              </p>
+              <p className="text-sm text-gray-500">
+                You will be redirected to the sign in page shortly.
+              </p>
+            </div>
+
+            <Link href="/login">
+              <LoadingButton className="w-full">
+                Continue to Sign In
+              </LoadingButton>
+            </Link>
+          </div>
+        </FormWrapper>
+      </div>
     )
   }
 
   return (
-    <MainLayout>
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <FormWrapper
-          title="Reset Your Password"
-          description="Enter your new password below"
-        >
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {submitError && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{submitError}</AlertDescription>
-              </Alert>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <FormWrapper
+        title="Reset Your Password"
+        description="Enter your new password below"
+      >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {submitError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{submitError}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* New Password Field */}
+          <div className="space-y-2">
+            <Label htmlFor="password">New Password</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your new password"
+                {...register('password')}
+                className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+
+            {/* Password Strength Indicator */}
+            {password && (
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
+                      style={{ width: `${(passwordStrength.strength / 5) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-sm text-gray-600">{passwordStrength.label}</span>
+                </div>
+              </div>
             )}
 
-            {/* New Password Field */}
-            <div className="space-y-2">
-              <Label htmlFor="password">New Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your new password"
-                  {...register('password')}
-                  className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
+            {errors.password && (
+              <p className="text-sm text-red-600">{errors.password.message}</p>
+            )}
+          </div>
 
-              {/* Password Strength Indicator */}
-              {password && (
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
-                        style={{ width: `${(passwordStrength.strength / 5) * 100}%` }}
-                      />
-                    </div>
-                    <span className="text-sm text-gray-600">{passwordStrength.label}</span>
-                  </div>
-                </div>
-              )}
-
-              {errors.password && (
-                <p className="text-sm text-red-600">{errors.password.message}</p>
-              )}
+          {/* Confirm Password Field */}
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Confirm your new password"
+                {...register('confirmPassword')}
+                className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
+            {errors.confirmPassword && (
+              <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>
+            )}
+          </div>
 
-            {/* Confirm Password Field */}
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirm your new password"
-                  {...register('confirmPassword')}
-                  className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              {errors.confirmPassword && (
-                <p className="text-sm text-red-600">{errors.confirmPassword.message}</p>
-              )}
-            </div>
+          <LoadingButton
+            type="submit"
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+            className="w-full"
+          >
+            {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
+          </LoadingButton>
 
-            <LoadingButton
-              type="submit"
-              isLoading={isSubmitting}
-              disabled={isSubmitting}
-              className="w-full"
-            >
-              {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
-            </LoadingButton>
-
-            <div className="text-center">
-              <Link href="/login" className="text-[#0044CC] hover:underline font-medium">
+                      <div className="text-center">
+              <Link href="/login" className="text-rose-500 hover:underline font-medium">
                 Back to Sign In
               </Link>
             </div>
-          </form>
-        </FormWrapper>
-      </div>
-    </MainLayout>
+        </form>
+      </FormWrapper>
+    </div>
   )
 } 

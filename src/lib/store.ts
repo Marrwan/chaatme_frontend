@@ -3,14 +3,15 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { authService } from '@/services/authService'
 import type { User } from '@/services/userService'
 import { tokenManager } from '@/lib/api'
-import { browserUtils } from '@/lib/utils'
+import { browserUtils, safeBrowserUtils } from '@/lib/utils'
+import { socketService } from '@/services/socketService'
 
 // Import socket service for cleanup
-let socketService: any = null
+let socketServiceInstance: any = null
 
 // Function to set socket service reference
 export const setSocketService = (service: any) => {
-  socketService = service
+  socketServiceInstance = service
 }
 
 interface AuthState {
@@ -47,6 +48,15 @@ export const useAuthStore = create<AuthState>()(
           console.log('[AuthStore] Setting token:', token.substring(0, 20) + '...')
           tokenManager.set(token)
           set({ token })
+          
+          // Connect socket after successful login
+          try {
+            console.log('[AuthStore] Connecting socket...')
+            socketService.connect(token)
+            console.log('[AuthStore] Socket connected successfully')
+          } catch (error) {
+            console.error('[AuthStore] Failed to connect socket:', error)
+          }
         }
         set({
           user: {
@@ -67,9 +77,17 @@ export const useAuthStore = create<AuthState>()(
           console.log('[AuthStore] Logging out...')
           
           // Disconnect socket first
-          if (socketService) {
+          if (socketServiceInstance) {
             console.log('[AuthStore] Disconnecting socket...')
+            socketServiceInstance.disconnect()
+          }
+          
+          // Also disconnect using the imported socketService
+          try {
+            console.log('[AuthStore] Disconnecting socket via socketService...')
             socketService.disconnect()
+          } catch (error) {
+            console.warn('[AuthStore] Socket disconnect error:', error)
           }
           
           await authService.logout()
@@ -147,6 +165,16 @@ export const useAuthStore = create<AuthState>()(
               isInitialized: true,
               token
             })
+            
+            // Connect socket if user is authenticated
+            try {
+              console.log('[AuthStore] Connecting socket during initialization...')
+              socketService.connect(token)
+              console.log('[AuthStore] Socket connected during initialization')
+            } catch (error) {
+              console.error('[AuthStore] Failed to connect socket during initialization:', error)
+            }
+            
             console.log('[AuthStore] Initialization success. User authenticated')
           } else {
             set({
@@ -199,13 +227,13 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'choice-talent-auth',
       storage: createJSONStorage(() => {
-        const browserName = browserUtils.getBrowserName()
-        const storage = browserUtils.getBestStorage()
+        const browserName = safeBrowserUtils.getBrowserName()
+        const storage = safeBrowserUtils.getBestStorage()
         console.log(`[AuthStore] Creating storage for ${browserName}, storage available:`, !!storage)
         return storage || localStorage // Fallback to localStorage if browserUtils fails
       }),
       partialize: (state) => {
-        const browserName = browserUtils.getBrowserName()
+        const browserName = safeBrowserUtils.getBrowserName()
         console.log(`[AuthStore] Partializing state for ${browserName}:`, {
           hasUser: !!state.user,
           isAuthenticated: state.isAuthenticated,
@@ -219,7 +247,7 @@ export const useAuthStore = create<AuthState>()(
         }
       },
       onRehydrateStorage: () => (state) => {
-        const browserName = browserUtils.getBrowserName()
+        const browserName = safeBrowserUtils.getBrowserName()
         console.log(`[AuthStore] Rehydrating state for ${browserName}:`, state)
       },
     }

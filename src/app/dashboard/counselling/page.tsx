@@ -131,30 +131,29 @@ export default function CounsellingPage() {
   ]
 
   return (
-    <MainLayout isAuthenticated={isAuthenticated} user={user} onLogout={() => {}}>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="mb-8">
-            <Link 
-              href="/dashboard" 
-              className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Link>
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                  <MessageCircle className="h-8 w-8 text-purple-600" />
-                  Counselling Services
-                </h1>
-                <p className="text-gray-600 mt-2">
-                  Personal transformation and relationship coaching to help you become your best self
-                </p>
-              </div>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <Link 
+            href="/dashboard" 
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Link>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+                <MessageCircle className="h-8 w-8 text-purple-600" />
+                Counselling Services
+              </h1>
+              <p className="text-gray-600 mt-2">
+                Personal transformation and relationship coaching to help you become your best self
+              </p>
             </div>
           </div>
+        </div>
 
           {/* Hero Section */}
           <Card className="mb-8 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
@@ -309,6 +308,6 @@ export default function CounsellingPage() {
           </Card>
         </div>
       </div>
-    </MainLayout>
+    </div>
   )
 } 

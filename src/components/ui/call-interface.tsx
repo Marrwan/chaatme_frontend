@@ -8,7 +8,7 @@ import {
 import { User, PhoneOff, Volume2, VolumeX, Mic, MicOff, Video, VideoOff, Phone } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { CallInterfaceProps } from "./call-interface-types"
-
+import { webrtcService, type CallState, type CallType } from "@/services/webrtcService"
 
 export function CallInterface({
   callState,
@@ -32,10 +32,25 @@ export function CallInterface({
   remoteStream,
 }: CallInterfaceProps) {
   const [elapsedTime, setElapsedTime] = useState(callDuration)
+  const [currentCallState, setCurrentCallState] = useState<CallState>('idle')
+  const [isLocalMuted, setIsLocalMuted] = useState(false)
+  const [isLocalCameraOn, setIsLocalCameraOn] = useState(true)
   const remoteAudioRef = useRef<HTMLAudioElement | null>(null)
   const ringingAudioRef = useRef<HTMLAudioElement | null>(null)
 
   console.log('[Call] Current state:', callState)
+
+  // Initialize WebRTC service listeners
+  useEffect(() => {
+    const unsubscribeState = webrtcService.onCallStateChange((state) => {
+      console.log('[Call] WebRTC state changed:', state)
+      setCurrentCallState(state)
+    })
+
+    return () => {
+      unsubscribeState()
+    }
+  }, [])
 
   // Handle remote audio stream for audio calls - IMPROVED
   useEffect(() => {
@@ -229,6 +244,47 @@ export function CallInterface({
     }
   }
 
+  // Enhanced mute toggle with WebRTC integration
+  const handleToggleMute = async () => {
+    try {
+      const newMuteState = await webrtcService.toggleMute()
+      setIsLocalMuted(!newMuteState)
+      if (onToggleMute) {
+        onToggleMute()
+      }
+    } catch (error) {
+      console.error('Error toggling mute:', error)
+    }
+  }
+
+  // Enhanced camera toggle with WebRTC integration
+  const handleToggleCamera = async () => {
+    try {
+      const newCameraState = await webrtcService.toggleVideo()
+      setIsLocalCameraOn(newCameraState)
+      if (onToggleCamera) {
+        onToggleCamera()
+      }
+    } catch (error) {
+      console.error('Error toggling camera:', error)
+    }
+  }
+
+  // Enhanced end call with WebRTC cleanup
+  const handleEndCall = async () => {
+    try {
+      await webrtcService.endCall()
+      if (onEndCall) {
+        onEndCall()
+      }
+    } catch (error) {
+      console.error('Error ending call:', error)
+      if (onEndCall) {
+        onEndCall()
+      }
+    }
+  }
+
   // WhatsApp-like controls logic - FIXED
   const isCallerInitiating = callState === 'outgoing_ringing' || callState === 'initiating'
   const isReceiverRinging = callState === 'incoming_ringing'
@@ -367,7 +423,7 @@ export function CallInterface({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={onEndCall}
+                    onClick={handleEndCall}
                     className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <PhoneOff className="w-6 h-6 text-white" />
@@ -386,7 +442,7 @@ export function CallInterface({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={onDeclineCall || onEndCall}
+                    onClick={onDeclineCall || handleEndCall}
                     className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <PhoneOff className="w-6 h-6 text-white" />
@@ -418,13 +474,13 @@ export function CallInterface({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={onToggleMute}
+                    onClick={handleToggleMute}
                     className={cn(
                       "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-                      isMuted ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"
+                      (isMuted || isLocalMuted) ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"
                     )}
                   >
-                    {isMuted ? (
+                    {(isMuted || isLocalMuted) ? (
                       <MicOff className="w-6 h-6 text-white" />
                     ) : (
                       <Mic className="w-6 h-6 text-white" />
@@ -432,7 +488,7 @@ export function CallInterface({
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {isMuted ? "Unmute" : "Mute"}
+                  {(isMuted || isLocalMuted) ? "Unmute" : "Mute"}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -442,13 +498,13 @@ export function CallInterface({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
-                      onClick={onToggleCamera}
+                      onClick={handleToggleCamera}
                       className={cn(
                         "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-                        isCameraOn ? "bg-white/10 hover:bg-white/20" : "bg-red-500 hover:bg-red-600"
+                        (isCameraOn && isLocalCameraOn) ? "bg-white/10 hover:bg-white/20" : "bg-red-500 hover:bg-red-600"
                       )}
                     >
-                      {isCameraOn ? (
+                      {(isCameraOn && isLocalCameraOn) ? (
                         <Video className="w-6 h-6 text-white" />
                       ) : (
                         <VideoOff className="w-6 h-6 text-white" />
@@ -456,7 +512,7 @@ export function CallInterface({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    {isCameraOn ? "Turn Camera Off" : "Turn Camera On"}
+                    {(isCameraOn && isLocalCameraOn) ? "Turn Camera Off" : "Turn Camera On"}
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -489,7 +545,7 @@ export function CallInterface({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={onEndCall}
+                    onClick={handleEndCall}
                     className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <PhoneOff className="w-6 h-6 text-white" />
