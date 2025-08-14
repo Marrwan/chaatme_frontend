@@ -122,7 +122,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl w-full flex items-center justify-center space-x-8">
+      <div className="w-full max-w-4xl flex flex-col lg:flex-row items-center justify-center lg:space-x-8">
         {/* Left Side - Image Collage */}
         <div className="hidden lg:block relative w-96 h-96">
           <div className="relative w-full h-full">
@@ -216,44 +216,40 @@ export default function LoginPage() {
                 )}
               </div>
 
-              {/* Login Button */}
+              {/* Submit Button */}
               <Button
                 type="submit"
                 className="w-full h-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-sm transition-colors"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Logging In...' : 'Log In'}
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Signing in...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
               </Button>
             </form>
 
-            {/* Divider */}
-            <div className="flex items-center my-4">
-              <div className="flex-1 border-t border-gray-300"></div>
-              <span className="px-4 text-xs text-gray-500 font-semibold">OR</span>
-              <div className="flex-1 border-t border-gray-300"></div>
-            </div>
-
-            {/* Forgot Password */}
-            <div className="text-center">
-              <Link 
-                href="/forgot-password" 
-                className="text-xs text-rose-600 font-semibold hover:underline"
-              >
-                Forgot password?
+            {/* Forgot Password Link */}
+            <div className="mt-4 text-center">
+              <Link href="/reset-password" className="text-sm text-purple-600 hover:text-purple-700">
+                Forgot your password?
               </Link>
             </div>
           </div>
 
-          {/* Sign Up Card */}
+          {/* Sign Up Link */}
           <div className="bg-white border border-gray-300 rounded-sm px-8 py-4 text-center mt-3">
-            <p className="text-sm text-gray-900">
+            <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <Link href="/register" className="text-rose-500 font-semibold hover:underline">
+              <Link href="/register" className="text-purple-600 hover:text-purple-700 font-semibold">
                 Sign up
               </Link>
             </p>
           </div>
-
         </div>
       </div>
     </div>

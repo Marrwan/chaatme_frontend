@@ -328,10 +328,11 @@ export default function ProfilePage() {
                   Back to Dashboard
                 </Button>
               </Link>
-              <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
+              
             </div>
           </div>
         </div>
+        <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
 
         {/* Message */}
         {message && (
@@ -350,10 +351,52 @@ export default function ProfilePage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
+
+             {/* Profile Picture */}
+             <Card>
+            <CardHeader>
+              <CardTitle>Profile Picture</CardTitle>
+              <CardDescription>
+                Add a profile picture to make your profile more attractive
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="profilePicture">Profile Picture URL</Label>
+                  <Input
+                    id="profilePicture"
+                    type="url"
+                    value={formData.profilePicture}
+                    onChange={(e) => handleInputChange('profilePicture', e.target.value)}
+                    placeholder="Enter the URL of your profile picture"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter a valid image URL (e.g., from a photo hosting service)
+                  </p>
+                </div>
+                
+                {profilePicturePreview && (
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={profilePicturePreview}
+                      alt="Profile Preview"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                    <span className="text-sm text-gray-600">Preview</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Basic Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>Basic Details</CardTitle>
               <CardDescription>
                 Your basic profile information and interests
               </CardDescription>
@@ -518,51 +561,12 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Profile Picture */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Picture</CardTitle>
-              <CardDescription>
-                Add a profile picture to make your profile more attractive
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="profilePicture">Profile Picture URL</Label>
-                  <Input
-                    id="profilePicture"
-                    type="url"
-                    value={formData.profilePicture}
-                    onChange={(e) => handleInputChange('profilePicture', e.target.value)}
-                    placeholder="Enter the URL of your profile picture"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Enter a valid image URL (e.g., from a photo hosting service)
-                  </p>
-                </div>
-                
-                {profilePicturePreview && (
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={profilePicturePreview}
-                      alt="Profile Preview"
-                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                      }}
-                    />
-                    <span className="text-sm text-gray-600">Preview</span>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+       
 
           {/* Personal Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Personal Details</CardTitle>
+              <CardTitle>Matching Details</CardTitle>
               <CardDescription>
                 Your personal information and physical characteristics
               </CardDescription>
@@ -581,7 +585,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <Label htmlFor="gender">Gender *</Label>
-                  <Select value={formData.gender || 'not-selected'} onValueChange={(value) => handleInputChange('gender', value === 'not-selected' ? '' : value)}>
+                  <Select value={formData.gender ? formData.gender : 'not-selected'} onValueChange={(value) => handleInputChange('gender', value === 'not-selected' ? '' : value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
@@ -598,7 +602,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="maritalStatus">Marital Status *</Label>
-                  <Select value={formData.maritalStatus || 'not-selected'} onValueChange={(value) => handleInputChange('maritalStatus', value === 'not-selected' ? '' : value)}>
+                  <Select value={formData.maritalStatus ? formData.maritalStatus : 'not-selected'} onValueChange={(value) => handleInputChange('maritalStatus', value === 'not-selected' ? '' : value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select marital status" />
                     </SelectTrigger>
@@ -626,7 +630,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="complexion">Complexion *</Label>
-                  <Select value={formData.complexion || 'not-selected'} onValueChange={(value) => handleInputChange('complexion', value === 'not-selected' ? '' : value)}>
+                  <Select value={formData.complexion ? formData.complexion : 'not-selected'} onValueChange={(value) => handleInputChange('complexion', value === 'not-selected' ? '' : value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select complexion" />
                     </SelectTrigger>
@@ -643,7 +647,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <Label htmlFor="bodySize">Body Size *</Label>
-                  <Select value={formData.bodySize || 'not-selected'} onValueChange={(value) => handleInputChange('bodySize', value === 'not-selected' ? '' : value)}>
+                  <Select value={formData.bodySize ? formData.bodySize : 'not-selected'} onValueChange={(value) => handleInputChange('bodySize', value === 'not-selected' ? '' : value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select body size" />
                     </SelectTrigger>
@@ -751,7 +755,7 @@ export default function ProfilePage() {
                   onClick={() => setIsPreviewMode(true)}
                 >
                   <Eye className="h-4 w-4 mr-2" />
-                  Preview Profile
+                  Preview
                 </Button>
               </div>
             </CardContent>

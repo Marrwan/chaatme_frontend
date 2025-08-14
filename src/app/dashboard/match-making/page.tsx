@@ -29,7 +29,8 @@ import {
   Search,
   Crown,
   Eye,
-  Edit
+  Edit,
+  Zap
 } from 'lucide-react'
 
 export default function MatchMakingPage() {
@@ -61,8 +62,14 @@ export default function MatchMakingPage() {
       return
     }
     
+    // Debug user data
+    console.log('Matchmaking page - User data:', user)
+    console.log('User subscription status:', user?.subscriptionStatus)
+    console.log('User isPremium:', user?.isPremium)
+    console.log('User canAccessMatchmaking:', user?.canAccessMatchmaking)
+    
     initializeMatchMaking()
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, router, user])
 
   const initializeMatchMaking = async () => {
     try {
@@ -136,7 +143,31 @@ export default function MatchMakingPage() {
       
       setMessage('Match preferences saved successfully!')
       setMessageType('success')
-      setCurrentStep('plans')
+      
+      // Debug logging
+      console.log('User subscription status:', user?.subscriptionStatus)
+      console.log('User isPremium:', user?.isPremium)
+      console.log('User canAccessMatchmaking:', user?.canAccessMatchmaking)
+      
+      // Check if user is premium, if not redirect to subscription
+      // Use multiple checks to ensure we catch all non-premium users
+      const isPremium = user?.subscriptionStatus === 'premium' || user?.isPremium === true
+      
+      console.log('Is user premium?', isPremium)
+      
+      if (user && !isPremium) {
+        console.log('Redirecting non-premium user to subscription page...')
+        // Try both router and window.location for testing
+        try {
+          router.push('/dashboard/subscription')
+        } catch (error) {
+          console.log('Router failed, using window.location...')
+          window.location.href = '/dashboard/subscription'
+        }
+      } else {
+        console.log('Premium user, continuing to plans step...')
+        setCurrentStep('plans')
+      }
     } catch (error: any) {
       console.error('Error saving preferences:', error)
       setMessage(error.message || 'Failed to save preferences. Please try again.')
@@ -174,10 +205,18 @@ export default function MatchMakingPage() {
                 </Link>
                 <h1 className="text-3xl font-bold text-gray-900">Match Preferences Preview</h1>
               </div>
-              <Button onClick={() => setIsPreviewMode(false)}>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Preferences
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={() => setIsPreviewMode(false)}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Preferences
+                </Button>
+                <Link href="/dashboard/subscription">
+                  <Button variant="outline" className="bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100">
+                    <Zap className="h-4 w-4 mr-2 " />
+                    Activate
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -294,10 +333,14 @@ export default function MatchMakingPage() {
                     Back to Dashboard
                   </Button>
                 </Link>
-                <h1 className="text-3xl font-bold text-gray-900">Set Match Preferences</h1>
+                <br />
+                
               </div>
+              
             </div>
+            
           </div>
+          <h1 className="text-3xl font-bold text-gray-900">Set Match Preferences</h1>
 
           {/* Message */}
           {message && (
@@ -479,7 +522,7 @@ export default function MatchMakingPage() {
               ) : (
                 <>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Preferences
+                  Save 
                 </>
               )}
             </Button>
@@ -488,8 +531,14 @@ export default function MatchMakingPage() {
               onClick={() => setIsPreviewMode(true)}
             >
               <Eye className="h-4 w-4 mr-2" />
-              Preview Preferences
+              View
             </Button>
+            <Link href="/dashboard/subscription">
+              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                <Zap className="h-4 w-4 mr-2" />
+                Activate
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -608,10 +657,16 @@ export default function MatchMakingPage() {
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Preferences
                 </Button>
-                <Button onClick={() => setIsPreviewMode(true)} variant="outline">
-                  <Eye className="h-4 w-4 mr-2" />
+                <Button onClick={() => setIsPreviewMode(true)} className="bg-purple-600 hover:bg-purple-700 text-white">
+                  <Eye className="h- w-4 mr-2" />
                   Preview
                 </Button>
+                <Link href="/dashboard/subscription">
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Zap className="h-4 w-4 mr-2" />
+                    Activate
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -659,6 +714,31 @@ export default function MatchMakingPage() {
                 </Button>
               </Link>
               <h1 className="text-3xl font-bold text-gray-900">Match Making</h1>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button 
+                onClick={() => {
+                  console.log('Testing redirect logic...')
+                  console.log('User:', user)
+                  const isPremium = user?.subscriptionStatus === 'premium' || user?.isPremium === true
+                  console.log('Is premium?', isPremium)
+                  if (user && !isPremium) {
+                    console.log('Redirecting to subscription...')
+                    try {
+                      router.push('/dashboard/subscription')
+                    } catch (error) {
+                      console.log('Router failed, using window.location...')
+                      window.location.href = '/dashboard/subscription'
+                    }
+                  } else {
+                    console.log('User is premium, no redirect needed')
+                  }
+                }} 
+                variant="outline"
+                size="sm"
+              >
+                Test Redirect
+              </Button>
             </div>
           </div>
         </div>

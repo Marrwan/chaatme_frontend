@@ -40,6 +40,7 @@ import {
   Target,
   Award
 } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -207,7 +208,7 @@ export default function DashboardPage() {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+          <Card className="bg-gradient-to-r from-red-800 to-red-900 text-white">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -284,7 +285,12 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center">
-                    <UserIcon className="mr-2 h-5 w-5" />
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage src={user?.profilePicture} alt={user?.name || 'Profile'} />
+                      <AvatarFallback className="bg-purple-600 text-white text-xs">
+                        {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
                     Profile Completion
                   </CardTitle>
                   <CardDescription>
