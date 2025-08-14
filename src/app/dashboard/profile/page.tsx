@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox'
 import { useAuth } from '@/lib/store'
 import { userService, type UpdateProfileRequest } from '@/services/userService'
-import { ArrowLeft, Save, CheckCircle, AlertCircle, Upload, Eye } from 'lucide-react'
+import { ArrowLeft, Save, CheckCircle, AlertCircle, Upload, Eye, Edit } from 'lucide-react'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -20,6 +20,7 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState<'success' | 'error'>('success')
+  const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [formData, setFormData] = useState<UpdateProfileRequest>({
     name: '',
     realName: '',
@@ -104,93 +105,237 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSaving(true)
-    setMessage('')
-
-    // Client-side validation
-    const validationErrors: string[] = []
     
+    // Validate username
     if (formData.username && !isValidUsername(formData.username)) {
-      validationErrors.push('Username can only contain letters and numbers')
+      setMessage('Username can only contain letters and numbers (no spaces or special characters)')
+      setMessageType('error')
+      scrollToTop()
+      return
     }
     
     if (formData.username && formData.username.length < 3) {
-      validationErrors.push('Username must be at least 3 characters long')
-    }
-    
-    if (validationErrors.length > 0) {
-      setMessage(`Please fix the following issues:\n${validationErrors.map(err => `• ${err}`).join('\n')}`)
+      setMessage('Username must be at least 3 characters long')
       setMessageType('error')
-      setIsSaving(false)
-      scrollToTop() // Scroll to top on validation error
+      scrollToTop()
       return
     }
 
     try {
-      const result = await userService.updateProfile(formData)
-      updateUser(result.user)
-      setMessage(result.message)
+      setIsSaving(true)
+      setMessage('')
+      
+             const result = await userService.updateProfile(formData)
+       updateUser(result.user)
+      
+      setMessage('Profile updated successfully!')
       setMessageType('success')
-      scrollToTop() // Scroll to top on success
-    } catch (error) {
-      console.error('Profile update error:', error)
-      
-      // Handle validation errors more gracefully
-      let errorMessage = 'Failed to update profile'
-      if (error instanceof Error) {
-        errorMessage = error.message
-        
-        // If it's a validation error with multiple issues, format them better
-        if (errorMessage.includes(',')) {
-          // Split comma-separated errors and format as a list
-          const errors = errorMessage.split(',').map(err => err.trim())
-          errorMessage = `Please fix the following issues:\n${errors.map(err => `• ${err}`).join('\n')}`
-        }
-      }
-      
-      setMessage(errorMessage)
+      scrollToTop()
+    } catch (error: any) {
+      console.error('Error updating profile:', error)
+      setMessage(error.message || 'Failed to update profile. Please try again.')
       setMessageType('error')
-      scrollToTop() // Scroll to top on error
+      scrollToTop()
     } finally {
       setIsSaving(false)
     }
   }
 
-  if (!isAuthenticated || !user) {
-    return null
+  const getDisplayValue = (value: string | undefined) => {
+    if (!value || value === 'not-selected') return 'Not specified'
+    return value.charAt(0).toUpperCase() + value.slice(1).replace('-', ' ')
   }
 
-  const profileCompletion = userService.getProfileCompletionPercentage(user)
+  const getLoveLanguageDisplay = (loveLanguage: string | undefined) => {
+    if (!loveLanguage) return 'Not specified'
+    return loveLanguage.split(',').map(lang => 
+      lang.trim().split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    ).join(', ')
+  }
+
+  if (isPreviewMode) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Link href="/dashboard">
+                  <Button variant="outline" size="sm">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Dashboard
+                  </Button>
+                </Link>
+                <h1 className="text-3xl font-bold text-gray-900">Profile Preview</h1>
+              </div>
+              <Button onClick={() => setIsPreviewMode(false)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Profile
+              </Button>
+            </div>
+          </div>
+
+          {/* Profile Preview */}
+          <div className="space-y-8">
+            {/* Profile Header */}
+            <Card>
+              <CardContent className="p-8">
+                <div className="flex items-center space-x-6">
+                  <div className="relative">
+                    {profilePicturePreview ? (
+                      <img
+                        src={profilePicturePreview}
+                        alt="Profile"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-purple-200"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <div className="w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center border-4 border-purple-200">
+                        <span className="text-2xl font-bold text-purple-600">
+                          {formData.realName ? formData.realName.charAt(0).toUpperCase() : 'U'}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">{formData.realName || 'Not specified'}</h2>
+                    <p className="text-gray-600">@{formData.username || 'username'}</p>
+                    <p className="text-sm text-gray-500">{formData.occupation || 'Not specified'}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Basic Information */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Basic Information</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Real Name</Label>
+                    <p className="text-gray-900">{formData.realName || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Username</Label>
+                    <p className="text-gray-900">@{formData.username || 'Not specified'}</p>
+                  </div>
+                </div>
+                
+                {formData.interests && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Interests</Label>
+                    <p className="text-gray-900">{formData.interests}</p>
+                  </div>
+                )}
+                
+                {formData.hobbies && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Hobbies</Label>
+                    <p className="text-gray-900">{formData.hobbies}</p>
+                  </div>
+                )}
+                
+                {formData.loveLanguage && (
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Love Language</Label>
+                    <p className="text-gray-900">{getLoveLanguageDisplay(formData.loveLanguage)}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Personal Details */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Personal Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Date of Birth</Label>
+                    <p className="text-gray-900">{formData.dateOfBirth ? new Date(formData.dateOfBirth).toLocaleDateString() : 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Gender</Label>
+                    <p className="text-gray-900">{getDisplayValue(formData.gender)}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Marital Status</Label>
+                    <p className="text-gray-900">{getDisplayValue(formData.maritalStatus)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Height</Label>
+                    <p className="text-gray-900">{formData.height || 'Not specified'}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Complexion</Label>
+                    <p className="text-gray-900">{getDisplayValue(formData.complexion)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Body Size</Label>
+                    <p className="text-gray-900">{getDisplayValue(formData.bodySize)}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <Label className="text-sm font-medium text-gray-500">Occupation</Label>
+                  <p className="text-gray-900">{formData.occupation || 'Not specified'}</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">Country</Label>
+                    <p className="text-gray-900">{formData.country || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">State/Province</Label>
+                    <p className="text-gray-900">{formData.state || 'Not specified'}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-gray-500">LGA/Local Council</Label>
+                    <p className="text-gray-900">{formData.lga || 'Not specified'}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <Link 
-            href="/dashboard" 
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
-          </Link>
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-              <p className="text-gray-600 mt-2">
-                Complete your profile to unlock all features and improve your match potential
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Profile Completion</p>
-              <p className="text-2xl font-bold text-purple-600">{profileCompletion}%</p>
+            <div className="flex items-center space-x-4">
+              <Link href="/dashboard">
+                <Button variant="outline" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </Link>
+              <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
             </div>
           </div>
         </div>
 
-        {/* Success/Error Message */}
+        {/* Message */}
         {message && (
-          <div className={`mb-6 p-4 rounded-md flex items-start ${
+          <div className={`mb-6 p-4 rounded-lg flex items-start ${
             messageType === 'success' 
               ? 'bg-green-50 text-green-800 border border-green-200' 
               : 'bg-red-50 text-red-800 border border-red-200'
@@ -373,41 +518,56 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Profile Details */}
+          {/* Profile Picture */}
           <Card>
             <CardHeader>
-              <CardTitle>Profile Details</CardTitle>
+              <CardTitle>Profile Picture</CardTitle>
               <CardDescription>
-                Detailed information about yourself
+                Add a profile picture to make your profile more attractive
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <Label htmlFor="profilePicture">Profile Picture URL</Label>
-                <div className="space-y-2">
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="profilePicture">Profile Picture URL</Label>
                   <Input
                     id="profilePicture"
                     type="url"
                     value={formData.profilePicture}
                     onChange={(e) => handleInputChange('profilePicture', e.target.value)}
-                    placeholder="Enter URL to your profile picture"
+                    placeholder="Enter the URL of your profile picture"
                   />
-                  {profilePicturePreview && (
-                    <div className="flex items-center space-x-2">
-                      <img 
-                        src={profilePicturePreview} 
-                        alt="Profile preview" 
-                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none'
-                        }}
-                      />
-                      <span className="text-sm text-gray-600">Preview</span>
-                    </div>
-                  )}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter a valid image URL (e.g., from a photo hosting service)
+                  </p>
                 </div>
+                
+                {profilePicturePreview && (
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={profilePicturePreview}
+                      alt="Profile Preview"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none'
+                      }}
+                    />
+                    <span className="text-sm text-gray-600">Preview</span>
+                  </div>
+                )}
               </div>
-              
+            </CardContent>
+          </Card>
+
+          {/* Personal Details */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Details</CardTitle>
+              <CardDescription>
+                Your personal information and physical characteristics
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="dateOfBirth">Date of Birth *</Label>
@@ -562,7 +722,6 @@ export default function ProfilePage() {
           {/* Submit */}
           <Card>
             <CardHeader>
-              <CardTitle>Update Profile</CardTitle>
               <CardDescription>
                 Save your profile changes
               </CardDescription>
@@ -586,12 +745,14 @@ export default function ProfilePage() {
                     </>
                   )}
                 </Button>
-                <Link href="/dashboard">
-                  <Button type="button" variant="outline">
-                    <Eye className="h-4 w-4 mr-2" />
-                    View
-                  </Button>
-                </Link>
+                <Button 
+                  type="button" 
+                  variant="outline"
+                  onClick={() => setIsPreviewMode(true)}
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  Preview Profile
+                </Button>
               </div>
             </CardContent>
           </Card>

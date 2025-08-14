@@ -303,6 +303,7 @@ export default function DashboardPage() {
                         style={{ width: `${profileCompletion}%` }}
                       ></div>
                     </div>
+                    <br />
                     {profileCompletion < 100 && (
                       <Link href="/dashboard/profile">
                         <Button className="w-full bg-purple-600 hover:bg-purple-700">
