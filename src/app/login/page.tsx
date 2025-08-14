@@ -140,7 +140,10 @@ export default function LoginPage() {
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-2">
                 <img src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={40} height={40} className="rounded" />
-                <div className="text-2xl font-bold text-gray-900">Login to your account</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  <span className="block sm:hidden">Login</span>
+                  <span className="hidden sm:block">Login </span>
+                </div>
               </div>
             </div>
 
