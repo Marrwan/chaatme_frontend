@@ -248,14 +248,14 @@ export default function EmailCampaignsPage() {
 
           <Button 
             onClick={() => setShowCreateDialog(true)} 
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
             Create Campaign (Direct)
           </Button>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Campaign
               </Button>

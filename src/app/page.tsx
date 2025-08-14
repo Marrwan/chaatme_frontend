@@ -1,1 +1,5 @@
-export { default } from './dating-home'
+import { redirect } from 'next/navigation'
+
+export default function HomePage() {
+  redirect('/login')
+}

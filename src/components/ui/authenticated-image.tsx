@@ -29,7 +29,7 @@ export const AuthenticatedImage: React.FC<AuthenticatedImageProps> = ({
 
         // Check if it's a local file URL that needs authentication
         if (src.startsWith('/api/chat/')) {
-          const token = localStorage.getItem('choice_talent_token')
+          const token = localStorage.getItem('chaatme_token')
           if (!token) {
             setError(true)
             setImageSrc(fallback)

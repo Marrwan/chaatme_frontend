@@ -278,7 +278,7 @@ export default function RegisterPage() {
               {/* Sign Up Button */}
               <Button
                 type="submit"
-                className="w-full h-10 bg-rose-500 hover:bg-rose-600 text-white font-semibold text-sm rounded-sm transition-colors"
+                className="w-full h-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-sm transition-colors"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Creating Account...' : 'Sign Up'}

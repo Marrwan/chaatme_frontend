@@ -282,13 +282,13 @@ export function CallInterfaceV2({
           <div className="absolute bottom-8 left-0 right-0 flex justify-center space-x-6 z-10">
             <Button
               onClick={handleDeclineCall}
-              className="bg-red-500 hover:bg-red-600 rounded-full h-16 w-16"
+              className="bg-purple-600 hover:bg-purple-700 rounded-full h-16 w-16"
             >
               <PhoneOff className="h-6 w-6" />
             </Button>
             <Button
               onClick={handleAcceptCall}
-              className="bg-green-500 hover:bg-green-600 rounded-full h-16 w-16"
+              className="bg-purple-600 hover:bg-purple-700 rounded-full h-16 w-16"
             >
               <Phone className="h-6 w-6" />
             </Button>
@@ -301,7 +301,7 @@ export function CallInterfaceV2({
           <div className="absolute bottom-8 left-0 right-0 flex justify-center z-10">
             <Button
               onClick={handleEndCall}
-              className="bg-red-500 hover:bg-red-600 rounded-full h-16 w-16"
+              className="bg-purple-600 hover:bg-purple-700 rounded-full h-16 w-16"
             >
               <PhoneOff className="h-6 w-6" />
             </Button>
@@ -340,7 +340,7 @@ export function CallInterfaceV2({
             
             <Button
               onClick={handleEndCall}
-              className="bg-red-500 hover:bg-red-600 rounded-full h-14 w-14"
+              className="bg-purple-600 hover:bg-purple-700 rounded-full h-14 w-14"
             >
               <PhoneOff className="h-6 w-6" />
             </Button>

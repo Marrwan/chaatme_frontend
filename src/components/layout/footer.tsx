@@ -10,10 +10,10 @@ export function Footer() {
           {/* Brand Info */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-[#8B0000] rounded-lg flex items-center justify-center mr-3">
+              <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-3">
                 <Heart className="h-5 w-5 text-white" />
               </div>
-              <span className="text-lg font-semibold text-white">Choice Dating</span>
+              <span className="text-lg font-semibold text-white">ChaatMe</span>
             </div>
             <p className="text-gray-300 mb-4">
               Connecting hearts through meaningful relationships and genuine connections.
@@ -88,7 +88,7 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            © 2024 Choice Dating. All rights reserved.
+            © 2024 ChaatMe. All rights reserved.
           </p>
         </div>
       </div>

@@ -188,7 +188,7 @@ const GroupCallInterface: React.FC<GroupCallInterfaceProps> = ({
           {onDeclineCall && (
             <Button
               onClick={onDeclineCall}
-              className="bg-red-500 hover:bg-red-600 text-white rounded-full p-4"
+              className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-4"
               size="lg"
             >
               <PhoneOff className="h-6 w-6" />
@@ -198,7 +198,7 @@ const GroupCallInterface: React.FC<GroupCallInterfaceProps> = ({
           {onAcceptCall && (
             <Button
               onClick={onAcceptCall}
-              className="bg-green-500 hover:bg-green-600 text-white rounded-full p-4"
+              className="bg-purple-600 hover:bg-purple-700 text-white rounded-full p-4"
               size="lg"
             >
               <Phone className="h-6 w-6" />
@@ -340,7 +340,7 @@ const GroupCallInterface: React.FC<GroupCallInterfaceProps> = ({
               onClick={onToggleSpeaker}
               className={`rounded-full p-3 ${
                 isSpeakerOn 
-                  ? 'bg-blue-500 hover:bg-blue-600' 
+                  ? 'bg-purple-600 hover:bg-purple-700' 
                   : 'bg-gray-600 hover:bg-gray-700'
               }`}
             >
@@ -353,7 +353,7 @@ const GroupCallInterface: React.FC<GroupCallInterfaceProps> = ({
 
             <Button
               onClick={onEndCall}
-              className="bg-red-500 hover:bg-red-600 rounded-full p-3"
+              className="bg-purple-600 hover:bg-purple-700 rounded-full p-3"
             >
               <PhoneOff className="h-5 w-5 text-white" />
             </Button>

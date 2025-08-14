@@ -147,7 +147,7 @@ const IncomingGroupCallModal: React.FC<IncomingGroupCallModalProps> = ({
         <div className="flex justify-center space-x-8">
           <Button
             onClick={onDecline}
-            className="bg-red-500 hover:bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
+            className="bg-purple-600 hover:bg-purple-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
             size="lg"
           >
             <PhoneOff className="h-8 w-8" />
@@ -155,7 +155,7 @@ const IncomingGroupCallModal: React.FC<IncomingGroupCallModalProps> = ({
           
           <Button
             onClick={onAccept}
-            className="bg-green-500 hover:bg-green-600 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
+            className="bg-purple-600 hover:bg-purple-700 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200"
             size="lg"
           >
             <Phone className="h-8 w-8" />

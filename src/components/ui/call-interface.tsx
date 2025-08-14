@@ -404,7 +404,7 @@ export function CallInterface({
                     onClick={onToggleSpeaker}
                     className={cn(
                       "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-                      isSpeakerOn ? "bg-blue-500 hover:bg-blue-600" : "bg-white/10 hover:bg-white/20"
+                      isSpeakerOn ? "bg-purple-600 hover:bg-purple-700" : "bg-white/10 hover:bg-white/20"
                     )}
                   >
                     {isSpeakerOn ? (
@@ -424,7 +424,7 @@ export function CallInterface({
                 <TooltipTrigger asChild>
                   <button
                     onClick={handleEndCall}
-                    className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform hover:scale-105"
+                    className="w-16 h-16 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <PhoneOff className="w-6 h-6 text-white" />
                   </button>
@@ -443,7 +443,7 @@ export function CallInterface({
                 <TooltipTrigger asChild>
                   <button
                     onClick={onDeclineCall || handleEndCall}
-                    className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform hover:scale-105"
+                    className="w-16 h-16 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <PhoneOff className="w-6 h-6 text-white" />
                   </button>
@@ -456,7 +456,7 @@ export function CallInterface({
                 <TooltipTrigger asChild>
                   <button
                     onClick={onAcceptCall}
-                    className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-transform hover:scale-105"
+                    className="w-16 h-16 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <Phone className="w-6 h-6 text-white" />
                   </button>
@@ -477,7 +477,7 @@ export function CallInterface({
                     onClick={handleToggleMute}
                     className={cn(
                       "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-                      (isMuted || isLocalMuted) ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"
+                      (isMuted || isLocalMuted) ? "bg-purple-600 hover:bg-purple-700" : "bg-white/10 hover:bg-white/20"
                     )}
                   >
                     {(isMuted || isLocalMuted) ? (
@@ -501,7 +501,7 @@ export function CallInterface({
                       onClick={handleToggleCamera}
                       className={cn(
                         "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-                        (isCameraOn && isLocalCameraOn) ? "bg-white/10 hover:bg-white/20" : "bg-red-500 hover:bg-red-600"
+                        (isCameraOn && isLocalCameraOn) ? "bg-white/10 hover:bg-white/20" : "bg-purple-600 hover:bg-purple-700"
                       )}
                     >
                       {(isCameraOn && isLocalCameraOn) ? (
@@ -525,7 +525,7 @@ export function CallInterface({
                     onClick={onToggleSpeaker}
                     className={cn(
                       "w-14 h-14 rounded-full flex items-center justify-center transition-colors",
-                      isSpeakerOn ? "bg-blue-500 hover:bg-blue-600" : "bg-white/10 hover:bg-white/20"
+                      isSpeakerOn ? "bg-purple-600 hover:bg-purple-700" : "bg-white/10 hover:bg-white/20"
                     )}
                   >
                     {isSpeakerOn ? (
@@ -546,7 +546,7 @@ export function CallInterface({
                 <TooltipTrigger asChild>
                   <button
                     onClick={handleEndCall}
-                    className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform hover:scale-105"
+                    className="w-16 h-16 rounded-full bg-purple-600 hover:bg-purple-700 flex items-center justify-center transition-transform hover:scale-105"
                   >
                     <PhoneOff className="w-6 h-6 text-white" />
                   </button>

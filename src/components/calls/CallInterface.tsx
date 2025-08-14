@@ -245,7 +245,7 @@ export default function CallInterface({
                 <Button
                   size="lg"
                   onClick={handleRejectCall}
-                  className="bg-red-600 hover:bg-red-700 text-white h-12 w-12 rounded-full p-0"
+                  className="bg-purple-600 hover:bg-purple-700 text-white h-12 w-12 rounded-full p-0"
                 >
                   <PhoneOff className="h-6 w-6" />
                 </Button>
@@ -253,7 +253,7 @@ export default function CallInterface({
                 <Button
                   size="lg"
                   onClick={handleAcceptCall}
-                  className="bg-green-600 hover:bg-green-700 text-white h-12 w-12 rounded-full p-0"
+                  className="bg-purple-600 hover:bg-purple-700 text-white h-12 w-12 rounded-full p-0"
                 >
                   <Phone className="h-6 w-6" />
                 </Button>
@@ -293,7 +293,7 @@ export default function CallInterface({
                 <Button
                   size="lg"
                   onClick={handleEndCall}
-                  className="bg-red-600 hover:bg-red-700 text-white h-12 w-12 rounded-full p-0"
+                  className="bg-purple-600 hover:bg-purple-700 text-white h-12 w-12 rounded-full p-0"
                 >
                   <PhoneOff className="h-6 w-6" />
                 </Button>
@@ -303,7 +303,7 @@ export default function CallInterface({
               <Button
                 size="lg"
                 onClick={handleEndCall}
-                className="bg-red-600 hover:bg-red-700 text-white h-12 w-12 rounded-full p-0"
+                className="bg-purple-600 hover:bg-purple-700 text-white h-12 w-12 rounded-full p-0"
               >
                 <PhoneOff className="h-6 w-6" />
               </Button>

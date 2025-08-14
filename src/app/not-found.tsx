@@ -12,8 +12,8 @@ export default function NotFound() {
       <div className="max-w-md w-full space-y-8">
         <Card className="text-center">
           <CardHeader>
-            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
-              <AlertTriangle className="h-8 w-8 text-red-600" />
+            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-purple-100 mb-4">
+              <AlertTriangle className="h-8 w-8 text-purple-600" />
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">404 - Page Not Found</CardTitle>
             <CardDescription className="text-lg text-gray-600">
@@ -49,7 +49,7 @@ export default function NotFound() {
                 <Link href="/dashboard" className="block">
                   <Button variant="ghost" size="sm" className="w-full">
                     <Search className="mr-2 h-4 w-4" />
-                    Dating Dashboard
+                    Dashboard
                   </Button>
                 </Link>
 

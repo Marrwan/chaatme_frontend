@@ -39,7 +39,7 @@ export default function DatingSettingsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -118,11 +118,11 @@ export default function DatingSettingsPage() {
             className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dating Dashboard
+            Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Dating Settings</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
           <p className="text-gray-600 mt-2">
-            Manage your dating account settings and preferences
+            Manage your account settings and preferences
           </p>
         </div>
 
@@ -175,7 +175,7 @@ export default function DatingSettingsPage() {
                 <Link href="/dashboard/profile">
                   <Button variant="outline">
                     <User className="mr-2 h-4 w-4" />
-                    Edit Dating Profile
+                    Edit Profile
                   </Button>
                 </Link>
               </div>
@@ -258,7 +258,7 @@ export default function DatingSettingsPage() {
                 <Button
                   type="submit"
                   disabled={isSaving}
-                  className="bg-rose-500 hover:bg-rose-600 text-white"
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
                 >
                   {isSaving ? (
                     <>

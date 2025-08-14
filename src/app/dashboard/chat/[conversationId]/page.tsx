@@ -61,7 +61,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, onDelete,
 
   const downloadFile = async (fileUrl: string, fileName: string) => {
     try {
-      const token = localStorage.getItem('choice_talent_token')
+      const token = localStorage.getItem('chaatme_token')
       if (!token) {
         console.error('No authentication token found')
         return
@@ -121,7 +121,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn, onDelete,
         <div
           className={`relative rounded-lg px-3 py-2 ${
             isOwn 
-              ? 'bg-blue-500 text-white' 
+              ? 'bg-purple-600 text-white'
               : 'bg-gray-100 text-gray-900'
           }`}
           onMouseEnter={() => setShowActions(true)}
@@ -417,7 +417,7 @@ function ChatPageContent() {
     // Set up socket service reference for auth store
     setupSocketServiceReference()
     
-    const token = localStorage.getItem('choice_talent_token')
+    const token = localStorage.getItem('chaatme_token')
     if (token && currentUser && !socketService.isConnected()) {
       console.log('🔌 [Chat] Initializing socket connection for chat page')
       socketService.connect(token)

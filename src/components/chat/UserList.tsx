@@ -182,7 +182,7 @@ export default function UserList({ onUserSelect, onStartCall, selectedUserId }: 
                 <div
                   key={user.id}
                   className={`p-3 hover:bg-gray-50 cursor-pointer transition-colors ${
-                    selectedUserId === user.id ? 'bg-[#8B0000]/10 border-r-2 border-[#8B0000]' : ''
+                    selectedUserId === user.id ? 'bg-purple-600/10 border-r-2 border-purple-600' : ''
                   }`}
                   onClick={() => onUserSelect(user)}
                 >
@@ -190,7 +190,7 @@ export default function UserList({ onUserSelect, onStartCall, selectedUserId }: 
                     <div className="relative">
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={user.profilePicture} alt={getDisplayName(user)} />
-                        <AvatarFallback className="bg-[#8B0000] text-white text-sm">
+                        <AvatarFallback className="bg-purple-600 text-white text-sm">
                           {getInitials(user)}
                         </AvatarFallback>
                       </Avatar>

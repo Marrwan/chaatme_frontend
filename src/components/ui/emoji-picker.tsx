@@ -115,7 +115,7 @@ export function EmojiPicker({ onEmojiSelect, trigger }: EmojiPickerProps) {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-3 py-2 text-sm font-medium rounded-t-lg transition-colors ${
                   selectedCategory === category
-                    ? 'bg-rose-500 text-white'
+                    ? 'bg-purple-600 text-white'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >

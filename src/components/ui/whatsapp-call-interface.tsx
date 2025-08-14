@@ -401,7 +401,7 @@ export default function WhatsAppCallInterface({
                 <Button
                   size="lg"
                   onClick={handleAcceptCall}
-                  className="bg-green-500 hover:bg-green-600 rounded-full w-16 h-16 p-0"
+                  className="bg-purple-600 hover:bg-purple-700 rounded-full w-16 h-16 p-0"
                 >
                   <Phone className="h-6 w-6" />
                 </Button>
@@ -415,7 +415,7 @@ export default function WhatsAppCallInterface({
                   onClick={toggleMute}
                   className={cn(
                     "rounded-full w-12 h-12 p-0",
-                    isMuted ? 'bg-red-500 hover:bg-red-600 text-white border-red-500' : 'bg-white/20 hover:bg-white/30 text-white border-white/30'
+                    isMuted ? 'bg-purple-600 hover:bg-purple-700 text-white border-purple-600' : 'bg-white/20 hover:bg-white/30 text-white border-white/30'
                   )}
                 >
                   {isMuted ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}

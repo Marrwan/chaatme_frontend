@@ -235,7 +235,7 @@ export default function PlanDatePage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-rose-500 hover:bg-rose-600 text-white"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center">

@@ -140,7 +140,7 @@ export default function ConversationsPage() {
     fetchGroups();
     
     // Connect to socket for real-time updates
-    const token = localStorage.getItem('choice_talent_token')
+    const token = localStorage.getItem('chaatme_token')
     if (token) {
       console.log('[Chat] Connecting to socket with token')
       socketService.connect(token)
@@ -346,7 +346,7 @@ export default function ConversationsPage() {
             </Link>
             <button 
               onClick={testNavigation}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600 transition-colors"
+              className="px-4 py-2 bg-purple-600 text-white rounded-md text-sm hover:bg-purple-700 transition-colors"
             >
               Test Navigation
             </button>

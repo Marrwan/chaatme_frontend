@@ -9,9 +9,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useAuth } from '@/lib/store'
 import { userService, type UpdateProfileRequest } from '@/services/userService'
-import { ArrowLeft, Save, CheckCircle, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Save, CheckCircle, AlertCircle, Upload, Eye } from 'lucide-react'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -40,6 +41,7 @@ export default function ProfilePage() {
     contactNumber: '',
     email: ''
   })
+  const [profilePicturePreview, setProfilePicturePreview] = useState<string>('')
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -69,6 +71,7 @@ export default function ProfilePage() {
         contactNumber: user.contactNumber || '',
         email: user.email || ''
       })
+      setProfilePicturePreview(user.profilePicture || '')
     }
   }, [isAuthenticated, user, router])
 
@@ -82,6 +85,11 @@ export default function ProfilePage() {
       ...prev,
       [field]: value
     }))
+
+    // Update preview for profile picture
+    if (field === 'profilePicture') {
+      setProfilePicturePreview(value)
+    }
   }
 
   // Validate username format
@@ -175,7 +183,7 @@ export default function ProfilePage() {
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600">Profile Completion</p>
-              <p className="text-2xl font-bold text-blue-600">{profileCompletion}%</p>
+              <p className="text-2xl font-bold text-purple-600">{profileCompletion}%</p>
             </div>
           </div>
         </div>
@@ -197,10 +205,10 @@ export default function ProfilePage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Section 1: Basic Information */}
+          {/* Basic Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Section 1: Basic Information</CardTitle>
+              <CardTitle>Basic Information</CardTitle>
               <CardDescription>
                 Your basic profile information and interests
               </CardDescription>
@@ -263,28 +271,112 @@ export default function ProfilePage() {
               </div>
               
               <div>
-                                  <Label htmlFor="loveLanguage">Your Love Language</Label>
-                  <Select value={formData.loveLanguage || 'not-selected'} onValueChange={(value) => handleInputChange('loveLanguage', value === 'not-selected' ? '' : value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your love language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="not-selected">None selected</SelectItem>
-                      <SelectItem value="words-of-affirmation">Words of Affirmation</SelectItem>
-                      <SelectItem value="quality-time">Quality Time</SelectItem>
-                      <SelectItem value="receiving-gifts">Receiving Gifts</SelectItem>
-                      <SelectItem value="acts-of-service">Acts of Service</SelectItem>
-                      <SelectItem value="physical-touch">Physical Touch</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <Label>Your Love Language</Label>
+                <div className="space-y-3 mt-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="words-of-affirmation" 
+                      checked={formData.loveLanguage?.includes('words-of-affirmation') || false}
+                      onCheckedChange={(checked) => {
+                        const current = formData.loveLanguage ? formData.loveLanguage.split(',').filter(l => l.trim()) : []
+                        if (checked) {
+                          if (!current.includes('words-of-affirmation')) {
+                            handleInputChange('loveLanguage', [...current, 'words-of-affirmation'].join(', '))
+                          }
+                        } else {
+                          handleInputChange('loveLanguage', current.filter(l => l !== 'words-of-affirmation').join(', '))
+                        }
+                      }}
+                    />
+                    <Label htmlFor="words-of-affirmation" className="text-sm font-normal">
+                      Words of Affirmation
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="quality-time" 
+                      checked={formData.loveLanguage?.includes('quality-time') || false}
+                      onCheckedChange={(checked) => {
+                        const current = formData.loveLanguage ? formData.loveLanguage.split(',').filter(l => l.trim()) : []
+                        if (checked) {
+                          if (!current.includes('quality-time')) {
+                            handleInputChange('loveLanguage', [...current, 'quality-time'].join(', '))
+                          }
+                        } else {
+                          handleInputChange('loveLanguage', current.filter(l => l !== 'quality-time').join(', '))
+                        }
+                      }}
+                    />
+                    <Label htmlFor="quality-time" className="text-sm font-normal">
+                      Quality Time
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="receiving-gifts" 
+                      checked={formData.loveLanguage?.includes('receiving-gifts') || false}
+                      onCheckedChange={(checked) => {
+                        const current = formData.loveLanguage ? formData.loveLanguage.split(',').filter(l => l.trim()) : []
+                        if (checked) {
+                          if (!current.includes('receiving-gifts')) {
+                            handleInputChange('loveLanguage', [...current, 'receiving-gifts'].join(', '))
+                          }
+                        } else {
+                          handleInputChange('loveLanguage', current.filter(l => l !== 'receiving-gifts').join(', '))
+                        }
+                      }}
+                    />
+                    <Label htmlFor="receiving-gifts" className="text-sm font-normal">
+                      Receiving Gifts
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="acts-of-service" 
+                      checked={formData.loveLanguage?.includes('acts-of-service') || false}
+                      onCheckedChange={(checked) => {
+                        const current = formData.loveLanguage ? formData.loveLanguage.split(',').filter(l => l.trim()) : []
+                        if (checked) {
+                          if (!current.includes('acts-of-service')) {
+                            handleInputChange('loveLanguage', [...current, 'acts-of-service'].join(', '))
+                          }
+                        } else {
+                          handleInputChange('loveLanguage', current.filter(l => l !== 'acts-of-service').join(', '))
+                        }
+                      }}
+                    />
+                    <Label htmlFor="acts-of-service" className="text-sm font-normal">
+                      Acts of Service
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="physical-touch" 
+                      checked={formData.loveLanguage?.includes('physical-touch') || false}
+                      onCheckedChange={(checked) => {
+                        const current = formData.loveLanguage ? formData.loveLanguage.split(',').filter(l => l.trim()) : []
+                        if (checked) {
+                          if (!current.includes('physical-touch')) {
+                            handleInputChange('loveLanguage', [...current, 'physical-touch'].join(', '))
+                          }
+                        } else {
+                          handleInputChange('loveLanguage', current.filter(l => l !== 'physical-touch').join(', '))
+                        }
+                      }}
+                    />
+                    <Label htmlFor="physical-touch" className="text-sm font-normal">
+                      Physical Touch
+                    </Label>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Section 2: Profile Details */}
+          {/* Profile Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Section 2: Profile Details</CardTitle>
+              <CardTitle>Profile Details</CardTitle>
               <CardDescription>
                 Detailed information about yourself
               </CardDescription>
@@ -292,13 +384,28 @@ export default function ProfilePage() {
             <CardContent className="space-y-6">
               <div>
                 <Label htmlFor="profilePicture">Profile Picture URL</Label>
-                <Input
-                  id="profilePicture"
-                  type="url"
-                  value={formData.profilePicture}
-                  onChange={(e) => handleInputChange('profilePicture', e.target.value)}
-                  placeholder="Enter URL to your profile picture"
-                />
+                <div className="space-y-2">
+                  <Input
+                    id="profilePicture"
+                    type="url"
+                    value={formData.profilePicture}
+                    onChange={(e) => handleInputChange('profilePicture', e.target.value)}
+                    placeholder="Enter URL to your profile picture"
+                  />
+                  {profilePicturePreview && (
+                    <div className="flex items-center space-x-2">
+                      <img 
+                        src={profilePicturePreview} 
+                        alt="Profile preview" 
+                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                      <span className="text-sm text-gray-600">Preview</span>
+                    </div>
+                  )}
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -452,10 +559,10 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Section 3: Submit */}
+          {/* Submit */}
           <Card>
             <CardHeader>
-              <CardTitle>Section 3: Update Profile</CardTitle>
+              <CardTitle>Update Profile</CardTitle>
               <CardDescription>
                 Save your profile changes
               </CardDescription>
@@ -481,7 +588,8 @@ export default function ProfilePage() {
                 </Button>
                 <Link href="/dashboard">
                   <Button type="button" variant="outline">
-                    Cancel
+                    <Eye className="h-4 w-4 mr-2" />
+                    View
                   </Button>
                 </Link>
               </div>

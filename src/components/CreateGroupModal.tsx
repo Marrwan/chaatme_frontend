@@ -203,7 +203,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreate }
                         className="flex-shrink-0"
                       />
                       <Avatar className="h-10 w-10 flex-shrink-0">
-                        <AvatarFallback className="bg-blue-100 text-blue-600">
+                        <AvatarFallback className="bg-purple-100 text-purple-600">
                           {getInitials(user.name, user.username)}
                         </AvatarFallback>
                       </Avatar>

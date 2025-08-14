@@ -101,7 +101,7 @@ export function CallModal({ isOpen, onClose, targetUser, currentUser }: CallModa
             <Button
               onClick={() => handleInitiateCall('audio')}
               disabled={isInitiating}
-              className="flex flex-col items-center space-y-2 p-4 bg-green-500 hover:bg-green-600 text-white rounded-full"
+              className="flex flex-col items-center space-y-2 p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full"
             >
               <Phone className="w-6 h-6" />
               <span className="text-sm">Audio</span>
@@ -111,7 +111,7 @@ export function CallModal({ isOpen, onClose, targetUser, currentUser }: CallModa
             <Button
               onClick={() => handleInitiateCall('video')}
               disabled={isInitiating}
-              className="flex flex-col items-center space-y-2 p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
+              className="flex flex-col items-center space-y-2 p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full"
             >
               <Video className="w-6 h-6" />
               <span className="text-sm">Video</span>

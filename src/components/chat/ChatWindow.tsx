@@ -434,7 +434,7 @@ export default function ChatWindow({ selectedUser, onStartCall, currentUserId }:
                   size="sm"
                   onClick={handleSendMessage}
                   disabled={!newMessage.trim() || isSending}
-                  className="bg-green-500 hover:bg-green-600 text-white rounded-full w-10 h-10 p-0"
+                  className="bg-purple-600 hover:bg-purple-700 text-white rounded-full w-10 h-10 p-0"
                 >
                   {isSending ? (
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

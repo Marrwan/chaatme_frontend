@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
 
 import { useAuth } from '@/lib/store'
 import { userService } from '@/services/userService'
@@ -26,7 +27,8 @@ import {
   Calendar,
   Save,
   Search,
-  Crown
+  Crown,
+  Eye
 } from 'lucide-react'
 
 export default function MatchMakingPage() {
@@ -45,13 +47,10 @@ export default function MatchMakingPage() {
     ageMax: 65,
     gender: '',
     maritalStatus: '',
-    height: '',
     complexion: '',
     bodySize: '',
-    occupation: '',
-    country: '',
-    state: '',
-    lga: ''
+    sameInterests: false,
+    sameHobbies: false
   })
 
   useEffect(() => {
@@ -87,13 +86,10 @@ export default function MatchMakingPage() {
               ageMax: preference.ageMax || 65,
               gender: preference.gender || '',
               maritalStatus: preference.maritalStatus || '',
-              height: preference.height || '',
               complexion: preference.complexion || '',
               bodySize: preference.bodySize || '',
-              occupation: preference.occupation || '',
-              country: preference.country || '',
-              state: preference.state || '',
-              lga: preference.lga || ''
+              sameInterests: preference.sameInterests || false,
+              sameHobbies: preference.sameHobbies || false
             })
             setCurrentStep('plans')
           } else {
@@ -110,7 +106,7 @@ export default function MatchMakingPage() {
     }
   }
 
-  const handlePreferenceChange = (field: keyof SetMatchPreferenceRequest, value: string | number) => {
+  const handlePreferenceChange = (field: keyof SetMatchPreferenceRequest, value: string | number | boolean) => {
     setPreferenceForm(prev => ({
       ...prev,
       [field]: value
@@ -126,7 +122,15 @@ export default function MatchMakingPage() {
       setMatchPreference(result.preference)
       setMessage(result.message)
       setMessageType('success')
-      setCurrentStep('plans')
+      
+      // Check if user is premium, if not redirect to subscription
+      if (user && user.subscriptionStatus !== 'premium') {
+        setTimeout(() => {
+          router.push('/dashboard/subscription')
+        }, 2000)
+      } else {
+        setCurrentStep('plans')
+      }
     } catch (error) {
       console.error('Error saving preferences:', error)
       setMessage(error instanceof Error ? error.message : 'Failed to save preferences')
@@ -256,15 +260,6 @@ export default function MatchMakingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="height">Height</Label>
-              <Input
-                id="height"
-                value={preferenceForm.height}
-                onChange={(e) => handlePreferenceChange('height', e.target.value)}
-                placeholder="e.g., 5ft 8in or 173cm"
-              />
-            </div>
-            <div>
               <Label htmlFor="complexion">Complexion</Label>
               <Select value={preferenceForm.complexion} onValueChange={(value) => handlePreferenceChange('complexion', value)}>
                 <SelectTrigger>
@@ -280,9 +275,6 @@ export default function MatchMakingPage() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="bodySize">Body Size</Label>
               <Select value={preferenceForm.bodySize} onValueChange={(value) => handlePreferenceChange('bodySize', value)}>
@@ -298,44 +290,31 @@ export default function MatchMakingPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="occupation">Occupation</Label>
-              <Input
-                id="occupation"
-                value={preferenceForm.occupation}
-                onChange={(e) => handlePreferenceChange('occupation', e.target.value)}
-                placeholder="Enter preferred occupation"
-              />
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <Label htmlFor="country">Country</Label>
-              <Input
-                id="country"
-                value={preferenceForm.country}
-                onChange={(e) => handlePreferenceChange('country', e.target.value)}
-                placeholder="Enter country"
-              />
-            </div>
-            <div>
-              <Label htmlFor="state">State/Province</Label>
-              <Input
-                id="state"
-                value={preferenceForm.state}
-                onChange={(e) => handlePreferenceChange('state', e.target.value)}
-                placeholder="Enter state"
-              />
-            </div>
-            <div>
-              <Label htmlFor="lga">LGA/Local Council</Label>
-              <Input
-                id="lga"
-                value={preferenceForm.lga}
-                onChange={(e) => handlePreferenceChange('lga', e.target.value)}
-                placeholder="Enter LGA"
-              />
+          <div className="space-y-4">
+            <Label>Additional Preferences</Label>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="sameInterests" 
+                  checked={preferenceForm.sameInterests}
+                  onCheckedChange={(checked) => handlePreferenceChange('sameInterests', checked as boolean)}
+                />
+                <Label htmlFor="sameInterests" className="text-sm font-normal">
+                  People with same/similar interests like me
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="sameHobbies" 
+                  checked={preferenceForm.sameHobbies}
+                  onCheckedChange={(checked) => handlePreferenceChange('sameHobbies', checked as boolean)}
+                />
+                <Label htmlFor="sameHobbies" className="text-sm font-normal">
+                  People with same/similar hobbies like me
+                </Label>
+              </div>
             </div>
           </div>
 
@@ -354,7 +333,10 @@ export default function MatchMakingPage() {
               )}
             </Button>
             <Link href="/dashboard">
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">
+                <Eye className="h-4 w-4 mr-2" />
+                View
+              </Button>
             </Link>
           </div>
         </CardContent>
@@ -409,7 +391,7 @@ export default function MatchMakingPage() {
             </div>
             <div className="flex gap-4 justify-center">
               <Link href="/dashboard/subscription">
-                <Button className="bg-yellow-600 hover:bg-yellow-700">
+                <Button className="bg-purple-600 hover:bg-purple-700">
                   <Crown className="h-4 w-4 mr-2" />
                   Upgrade to Premium
                 </Button>
@@ -680,7 +662,7 @@ export default function MatchMakingPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                <Heart className="h-8 w-8 text-[#8B0000]" />
+                <Heart className="h-8 w-8 text-purple-600" />
                 Match Making
               </h1>
               <p className="text-gray-600 mt-2">
@@ -714,7 +696,7 @@ export default function MatchMakingPage() {
                     Upgrade to Premium to unlock matchmaking features and find your perfect match!
                   </p>
                   <Link href="/dashboard/subscription">
-                    <Button size="sm" className="bg-[#8B0000] hover:bg-[#660000] text-white">
+                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
                       <Crown className="h-4 w-4 mr-2" />
                       Upgrade Now
                     </Button>

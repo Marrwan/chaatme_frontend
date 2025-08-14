@@ -62,7 +62,7 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-[#8B0000] text-white">
+                      <AvatarFallback className="bg-purple-600 text-white">
                         {getInitials(user.email, user.name)}
                       </AvatarFallback>
                     </Avatar>
@@ -94,14 +94,14 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="cursor-pointer">
-                      <Heart className="mr-2 h-4 w-4" />
-                      <span>Dating Dashboard</span>
+                      <Home className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/profile" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
-                      <span>Dating Profile</span>
+                      <span>Profile</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -123,16 +123,22 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/dating-settings" className="cursor-pointer">
+                    <Link href="/dashboard/subscription" className="cursor-pointer">
+                      <Crown className="mr-2 h-4 w-4" />
+                      <span>Subscription</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings" className="cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
-                      <span>Dating Settings</span>
+                      <span>Settings</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    <span>Logout</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -141,7 +147,7 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
                 <Button asChild variant="ghost">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button asChild className="bg-rose-500 hover:bg-rose-600 text-white">
+                <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white">
                   <Link href="/register">Get Started</Link>
                 </Button>
               </div>

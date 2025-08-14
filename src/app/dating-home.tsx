@@ -18,16 +18,16 @@ export default function HomePage() {
           <div className="max-w-3xl mx-auto">
             <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
               Find Your Perfect{' '}
-              <span className="text-[#8B0000]">Match</span>{' '}
+              <span className="text-purple-600">Match</span>{' '}
               Today
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Choice Dating connects you with meaningful relationships through intelligent matching, 
+              ChaatMe connects you with meaningful relationships through intelligent matching, 
               authentic conversations, and genuine connections that last.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {isAuthenticated ? (
-                <Button asChild size="lg" className="text-lg px-8 bg-[#8B0000] hover:bg-[#660000]">
+                <Button asChild size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700">
                   <Link href="/dashboard">
                     Go to Dashboard
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -35,7 +35,7 @@ export default function HomePage() {
                 </Button>
               ) : (
                 <>
-                  <Button asChild size="lg" className="text-lg px-8 bg-[#8B0000] hover:bg-[#660000]">
+                  <Button asChild size="lg" className="text-lg px-8 bg-purple-600 hover:bg-purple-700">
                     <Link href="/register">
                       Start Dating Free
                       <ArrowRight className="ml-2 h-5 w-5" />
@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Why Choose Choice Dating?
+              Why Choose ChaatMe?
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Our platform combines advanced compatibility algorithms with genuine human connection 
@@ -67,7 +67,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Heart className="h-6 w-6 text-white" />
                 </div>
                 <CardTitle>Smart Compatibility Matching</CardTitle>
@@ -82,7 +82,7 @@ export default function HomePage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <MessageCircle className="h-6 w-6 text-white" />
                 </div>
                 <CardTitle>Authentic Conversations</CardTitle>
@@ -97,7 +97,7 @@ export default function HomePage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
                 <CardTitle>Plan Perfect Dates</CardTitle>
@@ -112,7 +112,7 @@ export default function HomePage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <CardTitle>Safe & Secure</CardTitle>
@@ -127,7 +127,7 @@ export default function HomePage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <CardTitle>Community Groups</CardTitle>
@@ -142,7 +142,7 @@ export default function HomePage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
-                <div className="w-12 h-12 bg-[#8B0000] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <Star className="h-6 w-6 text-white" />
                 </div>
                 <CardTitle>Premium Features</CardTitle>
@@ -163,15 +163,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-[#8B0000] mb-2">50,000+</div>
+              <div className="text-4xl font-bold text-purple-600 mb-2">50,000+</div>
               <div className="text-lg text-gray-600">Happy Couples</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-[#8B0000] mb-2">1M+</div>
+              <div className="text-4xl font-bold text-purple-600 mb-2">1M+</div>
               <div className="text-lg text-gray-600">Active Users</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-[#8B0000] mb-2">95%</div>
+              <div className="text-4xl font-bold text-purple-600 mb-2">95%</div>
               <div className="text-lg text-gray-600">Success Rate</div>
             </div>
           </div>
@@ -179,13 +179,13 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-[#8B0000]">
+      <section className="py-20 px-4 bg-purple-600">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Find Your Perfect Match?
           </h2>
-          <p className="text-xl text-red-100 mb-8">
-            Join thousands of singles who have found meaningful relationships on Choice Dating.
+          <p className="text-xl text-purple-100 mb-8">
+            Join thousands of singles who have found meaningful relationships on ChaatMe.
           </p>
           {!isAuthenticated && (
             <Button asChild size="lg" variant="secondary" className="text-lg px-8">

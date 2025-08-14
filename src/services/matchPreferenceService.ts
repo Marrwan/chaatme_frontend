@@ -9,13 +9,10 @@ export interface MatchPreference {
   ageMax?: number
   gender?: string
   maritalStatus?: string
-  height?: string
   complexion?: string
   bodySize?: string
-  occupation?: string
-  country?: string
-  state?: string
-  lga?: string
+  sameInterests?: boolean
+  sameHobbies?: boolean
   createdAt: string
   updatedAt: string
 }
@@ -25,13 +22,10 @@ export interface SetMatchPreferenceRequest {
   ageMax?: number
   gender?: string
   maritalStatus?: string
-  height?: string
   complexion?: string
   bodySize?: string
-  occupation?: string
-  country?: string
-  state?: string
-  lga?: string
+  sameInterests?: boolean
+  sameHobbies?: boolean
 }
 
 export interface MatchResult {
