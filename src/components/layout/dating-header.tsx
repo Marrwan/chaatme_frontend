@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu'
-import { User, LogOut, Settings, Crown, AlertCircle, Heart, MessageCircle, Calendar, Home } from 'lucide-react'
+import { User, LogOut, Settings, Crown, AlertCircle, Heart, MessageCircle, Calendar, Home, Menu } from 'lucide-react'
 
 interface User {
   id: string
@@ -143,14 +143,40 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center space-x-3">
-                <Button asChild variant="ghost">
-                  <Link href="/login">Sign In</Link>
-                </Button>
-                <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white">
-                  <Link href="/register">Get Started</Link>
-                </Button>
-              </div>
+              <>
+                {/* Desktop Navigation - Hidden on mobile */}
+                <div className="hidden md:flex items-center space-x-3">
+                  <Button asChild variant="ghost">
+                    <Link href="/login">Sign In</Link>
+                  </Button>
+                  <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Link href="/register">Get Started</Link>
+                  </Button>
+                </div>
+
+                {/* Mobile Navigation - Dropdown */}
+                <div className="md:hidden">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
+                        <Menu className="h-5 w-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-48" align="end" forceMount>
+                      <DropdownMenuItem asChild>
+                        <Link href="/login" className="cursor-pointer">
+                          <span>Sign In</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/register" className="cursor-pointer">
+                          <span>Get Started</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </>
             )}
           </div>
         </div>

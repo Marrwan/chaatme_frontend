@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ToastContextProvider } from "@/lib/useToast";
-import { AuthDebug } from "@/components/debug/AuthDebug";
 import { HeaderWithAuth } from '@/components/layout/HeaderWithAuth';
 import React from 'react';
 
@@ -53,7 +52,6 @@ export default function RootLayout({
           <ToastContextProvider>
             <HeaderWithAuth />
             {children}
-            <AuthDebug />
           </ToastContextProvider>
         </AuthProvider>
       </body>
