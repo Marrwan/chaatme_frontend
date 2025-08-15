@@ -183,14 +183,14 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-4 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Page Title */}
-        <div className="mb-8">
-          <div className="flex justify-between items-start">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-                <Heart className="h-8 w-8 text-purple-600" />
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2">
+                <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
                 Dashboard
               </h1>
               <p className="text-gray-600 mt-2">Welcome back, {getDisplayName(user)}!</p>
@@ -207,85 +207,85 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="bg-gradient-to-r from-red-800 to-red-900 text-white">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Total Matches</p>
-                  <p className="text-2xl font-bold">{dashboardStats.totalMatches}</p>
+                  <p className="text-white/80 text-xs sm:text-sm">Total Matches</p>
+                  <p className="text-lg sm:text-2xl font-bold">{dashboardStats.totalMatches}</p>
                 </div>
-                <Heart className="h-8 w-8 text-white/80" />
+                <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Active Chats</p>
-                  <p className="text-2xl font-bold">{dashboardStats.activeConversations}</p>
+                  <p className="text-white/80 text-xs sm:text-sm">Active Chats</p>
+                  <p className="text-lg sm:text-2xl font-bold">{dashboardStats.activeConversations}</p>
                 </div>
-                <MessageCircle className="h-8 w-8 text-white/80" />
+                <MessageCircle className="h-6 w-6 sm:h-8 sm:w-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-r from-green-600 to-green-700 text-white">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Completed Dates</p>
-                  <p className="text-2xl font-bold">{dashboardStats.completedDates}</p>
+                  <p className="text-white/80 text-xs sm:text-sm">Completed Dates</p>
+                  <p className="text-lg sm:text-2xl font-bold">{dashboardStats.completedDates}</p>
                 </div>
-                <Calendar className="h-8 w-8 text-white/80" />
+                <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/80 text-sm">Profile Views</p>
-                  <p className="text-2xl font-bold">{dashboardStats.profileViews}</p>
+                  <p className="text-white/80 text-xs sm:text-sm">Profile Views</p>
+                  <p className="text-lg sm:text-2xl font-bold">{dashboardStats.profileViews}</p>
                 </div>
-                <Activity className="h-8 w-8 text-white/80" />
+                <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-white/80" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <Target className="h-4 w-4" />
-              Overview
+        <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
+            <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+              <Target className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Overview</span>
             </TabsTrigger>
-            <TabsTrigger value="chat" className="flex items-center gap-2">
-              <MessageCircle className="h-4 w-4" />
-              Chat
+            <TabsTrigger value="chat" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+              <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="matches" className="flex items-center gap-2">
-              <Heart className="h-4 w-4" />
-              Matches
+            <TabsTrigger value="matches" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+              <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Matches</span>
             </TabsTrigger>
-            <TabsTrigger value="dates" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Dates
+            <TabsTrigger value="dates" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+              <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden sm:inline">Dates</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="overview" className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Profile Completion */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Avatar className="mr-2 h-5 w-5">
+                  <CardTitle className="flex items-center text-base sm:text-lg">
+                    <Avatar className="mr-2 h-4 w-4 sm:h-5 sm:w-5">
                       <AvatarImage src={user?.profilePicture} alt={user?.name || 'Profile'} />
                       <AvatarFallback className="bg-purple-600 text-white text-xs">
                         {user?.name?.charAt(0)?.toUpperCase() || 'U'}
@@ -325,8 +325,8 @@ export default function DashboardPage() {
               {/* Quick Actions */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Award className="mr-2 h-5 w-5" />
+                  <CardTitle className="flex items-center text-base sm:text-lg">
+                    <Award className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Quick Actions
                   </CardTitle>
                   <CardDescription>
@@ -360,8 +360,8 @@ export default function DashboardPage() {
           </TabsContent>
 
           {/* Chat Tab */}
-          <TabsContent value="chat" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+          <TabsContent value="chat" className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 h-[500px] sm:h-[600px]">
               <div className="lg:col-span-1">
                 <UserList 
                   onUserSelect={handleUserSelect}
@@ -380,11 +380,11 @@ export default function DashboardPage() {
           </TabsContent>
 
           {/* Matches Tab */}
-          <TabsContent value="matches" className="space-y-6">
+          <TabsContent value="matches" className="space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Heart className="mr-2 h-5 w-5" />
+                <CardTitle className="flex items-center text-base sm:text-lg">
+                  <Heart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Your Matches
                 </CardTitle>
                 <CardDescription>
@@ -392,10 +392,10 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Heart className="mx-auto h-16 w-16 mb-4 opacity-50" />
-                  <h3 className="text-xl font-medium mb-2">No Matches Yet</h3>
-                  <p className="mb-4">Complete your profile and set preferences to find matches</p>
+                <div className="text-center py-8 sm:py-12 text-gray-500">
+                  <Heart className="mx-auto h-12 w-12 sm:h-16 sm:w-16 mb-4 opacity-50" />
+                  <h3 className="text-lg sm:text-xl font-medium mb-2">No Matches Yet</h3>
+                  <p className="mb-4 text-sm sm:text-base">Complete your profile and set preferences to find matches</p>
                   <Link href="/dashboard/match-making">
                     <Button className="bg-purple-600 hover:bg-purple-700">
                       <Search className="mr-2 h-4 w-4" />
@@ -408,11 +408,11 @@ export default function DashboardPage() {
           </TabsContent>
 
           {/* Dates Tab */}
-          <TabsContent value="dates" className="space-y-6">
+          <TabsContent value="dates" className="space-y-4 sm:space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="mr-2 h-5 w-5" />
+                <CardTitle className="flex items-center text-base sm:text-lg">
+                  <Calendar className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Your Date Plans
                 </CardTitle>
                 <CardDescription>
@@ -420,10 +420,10 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Calendar className="mx-auto h-16 w-16 mb-4 opacity-50" />
-                  <h3 className="text-xl font-medium mb-2">No Date Plans Yet</h3>
-                  <p className="mb-4">Start planning romantic dates with your matches</p>
+                <div className="text-center py-8 sm:py-12 text-gray-500">
+                  <Calendar className="mx-auto h-12 w-12 sm:h-16 sm:w-16 mb-4 opacity-50" />
+                  <h3 className="text-lg sm:text-xl font-medium mb-2">No Date Plans Yet</h3>
+                  <p className="mb-4 text-sm sm:text-base">Start planning romantic dates with your matches</p>
                   <Link href="/dashboard/plan-date">
                     <Button className="bg-purple-600 hover:bg-purple-700">
                       <PlusCircle className="mr-2 h-4 w-4" />

@@ -38,7 +38,6 @@ export interface UpdateProfileRequest {
   interests?: string
   hobbies?: string
   loveLanguage?: string
-  profilePicture?: string
   dateOfBirth?: string
   gender?: string
   maritalStatus?: string
@@ -80,6 +79,24 @@ export const userService = {
       endpoint: '/user/profile',
       data,
       requiresAuth: true
+    })
+    return {
+      user: response.data.user,
+      message: response.message
+    }
+  },
+
+  // Upload profile picture
+  async uploadProfilePicture(file: File): Promise<{ user: User; message: string }> {
+    const formData = new FormData()
+    formData.append('profilePicture', file)
+    
+    const response = await apiClient.request<{ success: boolean; message: string; data: { user: User } }>({
+      method: 'POST',
+      endpoint: '/user/dating-profile-picture',
+      data: formData,
+      requiresAuth: true,
+      isFormData: true
     })
     return {
       user: response.data.user,

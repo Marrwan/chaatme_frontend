@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox'
 import { useAuth } from '@/lib/store'
 import { userService, type UpdateProfileRequest } from '@/services/userService'
-import { ArrowLeft, Save, CheckCircle, AlertCircle, Upload, Eye, Edit } from 'lucide-react'
+import { ArrowLeft, Save, CheckCircle, AlertCircle, Upload, Eye, Edit, X } from 'lucide-react'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -28,7 +28,6 @@ export default function ProfilePage() {
     interests: '',
     hobbies: '',
     loveLanguage: '',
-    profilePicture: '',
     dateOfBirth: '',
     gender: '',
     maritalStatus: '',
@@ -43,6 +42,8 @@ export default function ProfilePage() {
     email: ''
   })
   const [profilePicturePreview, setProfilePicturePreview] = useState<string>('')
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -58,7 +59,6 @@ export default function ProfilePage() {
         interests: user.interests || '',
         hobbies: user.hobbies || '',
         loveLanguage: user.loveLanguage || '',
-        profilePicture: user.profilePicture || '',
         dateOfBirth: user.dateOfBirth || '',
         gender: user.gender || '',
         maritalStatus: user.maritalStatus || '',
@@ -86,11 +86,6 @@ export default function ProfilePage() {
       ...prev,
       [field]: value
     }))
-
-    // Update preview for profile picture
-    if (field === 'profilePicture') {
-      setProfilePicturePreview(value)
-    }
   }
 
   // Validate username format
@@ -101,6 +96,78 @@ export default function ProfilePage() {
   // Scroll to top function
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Handle file selection
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setMessage('Please select an image file')
+        setMessageType('error')
+        return
+      }
+      
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        setMessage('File size must be less than 5MB')
+        setMessageType('error')
+        return
+      }
+      
+      setSelectedFile(file)
+      
+      // Create preview
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setProfilePicturePreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+      
+      // Clear any existing error messages
+      if (message && messageType === 'error') {
+        setMessage('')
+      }
+    }
+  }
+
+  // Handle file upload
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      setMessage('Please select a file to upload')
+      setMessageType('error')
+      return
+    }
+
+    try {
+      setIsUploading(true)
+      setMessage('')
+      
+      const result = await userService.uploadProfilePicture(selectedFile)
+      updateUser(result.user)
+      
+      // Update the profile picture preview with the server URL
+      setProfilePicturePreview(result.user.profilePicture || '')
+      
+      setMessage('Profile picture uploaded successfully!')
+      setMessageType('success')
+      setSelectedFile(null)
+      scrollToTop()
+    } catch (error: any) {
+      console.error('Error uploading profile picture:', error)
+      setMessage(error.message || 'Failed to upload profile picture. Please try again.')
+      setMessageType('error')
+      scrollToTop()
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  // Remove selected file
+  const removeSelectedFile = () => {
+    setSelectedFile(null)
+    setProfilePicturePreview(user?.profilePicture || '')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -155,11 +222,11 @@ export default function ProfilePage() {
 
   if (isPreviewMode) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard">
                   <Button variant="outline" size="sm">
@@ -167,7 +234,7 @@ export default function ProfilePage() {
                     Back to Dashboard
                   </Button>
                 </Link>
-                <h1 className="text-3xl font-bold text-gray-900">Profile Preview</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Profile Preview</h1>
               </div>
               <Button onClick={() => setIsPreviewMode(false)}>
                 <Edit className="h-4 w-4 mr-2" />
@@ -177,31 +244,31 @@ export default function ProfilePage() {
           </div>
 
           {/* Profile Preview */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Profile Header */}
             <Card>
-              <CardContent className="p-8">
-                <div className="flex items-center space-x-6">
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
                   <div className="relative">
                     {profilePicturePreview ? (
                       <img
                         src={profilePicturePreview}
                         alt="Profile"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-purple-200"
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-purple-200"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none'
                         }}
                       />
                     ) : (
-                      <div className="w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center border-4 border-purple-200">
-                        <span className="text-2xl font-bold text-purple-600">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-purple-100 flex items-center justify-center border-4 border-purple-200">
+                        <span className="text-xl sm:text-2xl font-bold text-purple-600">
                           {formData.realName ? formData.realName.charAt(0).toUpperCase() : 'U'}
                         </span>
                       </div>
                     )}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{formData.realName || 'Not specified'}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{formData.realName || 'Not specified'}</h2>
                     <p className="text-gray-600">@{formData.username || 'username'}</p>
                     <p className="text-sm text-gray-500">{formData.occupation || 'Not specified'}</p>
                   </div>
@@ -316,11 +383,11 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center space-x-4">
               <Link href="/dashboard">
                 <Button variant="outline" size="sm">
@@ -332,7 +399,7 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Edit Profile</h1>
 
         {/* Message */}
         {message && (
@@ -350,45 +417,105 @@ export default function ProfilePage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
 
-             {/* Profile Picture */}
-             <Card>
+          {/* Profile Picture */}
+          <Card>
             <CardHeader>
               <CardTitle>Profile Picture</CardTitle>
               <CardDescription>
-                Add a profile picture to make your profile more attractive
+                Upload a profile picture to make your profile more attractive
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div>
-                  <Label htmlFor="profilePicture">Profile Picture URL</Label>
-                  <Input
-                    id="profilePicture"
-                    type="url"
-                    value={formData.profilePicture}
-                    onChange={(e) => handleInputChange('profilePicture', e.target.value)}
-                    placeholder="Enter the URL of your profile picture"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Enter a valid image URL (e.g., from a photo hosting service)
-                  </p>
-                </div>
-                
+                {/* Current Profile Picture */}
                 {profilePicturePreview && (
-                  <div className="flex items-center space-x-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-4">
                     <img
                       src={profilePicturePreview}
-                      alt="Profile Preview"
-                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                      alt="Current Profile"
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-gray-200"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none'
                       }}
                     />
-                    <span className="text-sm text-gray-600">Preview</span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Current Profile Picture</p>
+                      <p className="text-xs text-gray-500">Your profile picture will be displayed to other users</p>
+                    </div>
                   </div>
                 )}
+
+                {/* File Upload Section */}
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="profilePictureFile">Upload New Profile Picture</Label>
+                    <div className="mt-2">
+                      <input
+                        id="profilePictureFile"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="profilePictureFile"
+                        className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Choose Image
+                      </label>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Supported formats: JPG, PNG, GIF. Maximum size: 5MB
+                    </p>
+                  </div>
+
+                  {/* Selected File Preview */}
+                  {selectedFile && (
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg space-y-3 sm:space-y-0">
+                      <div className="flex items-center space-x-3">
+                        <img
+                          src={profilePicturePreview}
+                          alt="Selected File Preview"
+                          className="w-12 h-12 rounded object-cover"
+                        />
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{selectedFile.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={handleFileUpload}
+                          disabled={isUploading}
+                        >
+                          {isUploading ? (
+                            <>
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-2"></div>
+                              Uploading...
+                            </>
+                          ) : (
+                            'Upload'
+                          )}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={removeSelectedFile}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -402,7 +529,7 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <Label htmlFor="realName">Real Name *</Label>
                   <Input
@@ -572,7 +699,7 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <Label htmlFor="dateOfBirth">Date of Birth *</Label>
                   <Input
@@ -599,7 +726,7 @@ export default function ProfilePage() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <Label htmlFor="maritalStatus">Marital Status *</Label>
                   <Select value={formData.maritalStatus ? formData.maritalStatus : 'not-selected'} onValueChange={(value) => handleInputChange('maritalStatus', value === 'not-selected' ? '' : value)}>
@@ -627,7 +754,7 @@ export default function ProfilePage() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <Label htmlFor="complexion">Complexion *</Label>
                   <Select value={formData.complexion ? formData.complexion : 'not-selected'} onValueChange={(value) => handleInputChange('complexion', value === 'not-selected' ? '' : value)}>
@@ -674,7 +801,7 @@ export default function ProfilePage() {
                 />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                 <div>
                   <Label htmlFor="country">Country *</Label>
                   <Input
@@ -731,7 +858,7 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   type="submit" 
                   disabled={isSaving}
@@ -745,7 +872,7 @@ export default function ProfilePage() {
                   ) : (
                     <>
                       <Save className="h-4 w-4 mr-2" />
-                      Update Profile
+                      Update
                     </>
                   )}
                 </Button>

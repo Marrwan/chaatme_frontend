@@ -109,6 +109,7 @@ interface RequestConfig {
   params?: Record<string, string | number>
   headers?: Record<string, string>
   requiresAuth?: boolean
+  isFormData?: boolean
 }
 
 // Main API client
@@ -119,7 +120,8 @@ export const apiClient = {
     data,
     params,
     headers = {},
-    requiresAuth = false
+    requiresAuth = false,
+    isFormData = false
   }: RequestConfig): Promise<T> {
     let url = `${API_BASE_URL}${endpoint}`
     
@@ -136,7 +138,7 @@ export const apiClient = {
     const defaultHeaders: Record<string, string> = {}
     
     // Only set Content-Type for non-FormData requests
-    if (!(data instanceof FormData)) {
+    if (!(data instanceof FormData) && !isFormData) {
       defaultHeaders['Content-Type'] = 'application/json'
     }
     

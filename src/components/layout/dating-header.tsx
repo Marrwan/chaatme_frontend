@@ -48,27 +48,27 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
   return (
     <header className="border-b border-gray-200 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center space-x-2">
-            <img src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={32} height={32} className="rounded" />
-            <span className="text-xl font-semibold text-gray-900">ChaatMe.com</span>
+            <img src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={28} height={28} className="rounded sm:w-8 sm:h-8" />
+            <span className="text-lg sm:text-xl font-semibold text-gray-900">ChaatMe.com</span>
           </Link>
 
           {/* Navigation */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-purple-600 text-white">
+                  <Button variant="ghost" className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full">
+                    <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+                      <AvatarFallback className="bg-purple-600 text-white text-xs sm:text-sm">
                         {getInitials(user.email, user.name)}
                       </AvatarFallback>
                     </Avatar>
                     {user.subscriptionStatus === 'premium' && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center">
-                        <Crown className="w-2 h-2 text-white" />
+                      <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-yellow-500 rounded-full flex items-center justify-center">
+                        <Crown className="w-1.5 h-1.5 sm:w-2 sm:h-2 text-white" />
                       </div>
                     )}
                   </Button>
@@ -158,8 +158,8 @@ export function DatingHeader({ isAuthenticated = false, user, onLogout }: Dating
                 <div className="md:hidden">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
-                        <Menu className="h-5 w-5" />
+                      <Button variant="ghost" size="sm" className="h-8 w-8 sm:h-10 sm:w-10 p-0">
+                        <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-48" align="end" forceMount>

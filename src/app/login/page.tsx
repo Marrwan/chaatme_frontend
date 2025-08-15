@@ -121,7 +121,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-4 px-4 sm:py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-4xl flex flex-col lg:flex-row items-center justify-center lg:space-x-8">
         {/* Left Side - Image Collage */}
         <div className="hidden lg:block relative w-96 h-96">
@@ -134,13 +134,13 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side - Login Form */}
-        <div className="w-full max-w-sm">
-          <div className="bg-white border border-gray-300 rounded-sm px-8 pt-6 pb-8">
+        <div className="w-full max-w-sm mx-auto">
+          <div className="bg-white border border-gray-300 rounded-sm px-6 sm:px-8 pt-6 pb-8">
             {/* ChaatMe Logo */}
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-2">
                 <img src="/ChaatMeLogo.jpg" alt="ChaatMe Logo" width={40} height={40} className="rounded" />
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-xl sm:text-2xl font-bold text-gray-900">
                   <span className="block sm:hidden">Login</span>
                   <span className="hidden sm:block">Login </span>
                 </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {submitError && (
                 <Alert variant="destructive" className="mb-4 text-sm">
                   <AlertCircle className="h-4 w-4" />
@@ -182,7 +182,7 @@ export default function LoginPage() {
                   placeholder="Email address"
                   autoComplete="email"
                   {...register('email')}
-                  className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
+                  className={`h-11 sm:h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
                   style={{ backgroundColor: '#fafafa' }}
                 />
                 {errors.email && (
@@ -199,7 +199,7 @@ export default function LoginPage() {
                     placeholder="Password"
                     autoComplete="current-password"
                     {...register('password')}
-                    className={`h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                    className={`h-11 sm:h-10 text-sm border-gray-300 focus:border-gray-400 focus:ring-0 pr-10 ${errors.password ? 'border-red-500' : ''}`}
                     style={{ backgroundColor: '#fafafa' }}
                   />
                   <button
@@ -222,7 +222,7 @@ export default function LoginPage() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full h-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-sm transition-colors"
+                className="w-full h-11 sm:h-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-sm transition-colors"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -245,7 +245,7 @@ export default function LoginPage() {
           </div>
 
           {/* Sign Up Link */}
-          <div className="bg-white border border-gray-300 rounded-sm px-8 py-4 text-center mt-3">
+          <div className="bg-white border border-gray-300 rounded-sm px-6 sm:px-8 py-4 text-center mt-3">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
               <Link href="/register" className="text-purple-600 hover:text-purple-700 font-semibold">
